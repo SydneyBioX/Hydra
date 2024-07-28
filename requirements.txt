@@ -1,0 +1,16 @@
+python==3.8
+anndata
+captum
+h5py
+hdf5
+libpng-bins
+libtiff
+torch
+torchvision
+torchaudio
+numpy
+pandas
+scipy
+scikit-learn
+scanpy
+tqdm
