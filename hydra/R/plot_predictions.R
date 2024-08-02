@@ -8,6 +8,8 @@ suppressPackageStartupMessages({
     library(Seurat)
     library(ggplot2)
     library(data.table)
+    library(SingleCellExperiment)
+    library(scater)
 })
 
 args <- commandArgs(trailingOnly = TRUE)
@@ -17,6 +19,10 @@ cell_type_predicted <- args[3]
 
 # Load the dataset
 dataset <- readRDS(dataset)
+
+if (inherits(dataset, "SingleCellExperiment")) {
+    dataset <- as.Seurat(dataset)
+}
 
 # Read the predicted cell types from the CSV file
 predicted_labels <- read.csv(cell_type_predicted)
