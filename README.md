@@ -1,4 +1,4 @@
-# Interpretable deep generative learning of cell identity paired with automated annotation for single-cell multi-omics
+# Interpretable deep generative learning for single-cell multi-omics with Hydra
 
 </br>
 
