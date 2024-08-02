@@ -1,4 +1,4 @@
-# Interpretable deep generative learning for single-cell multi-omics with Hydra
+# Interpretable deep generative learning for single-cell multiomics with Hydra
 
 </br>
 
