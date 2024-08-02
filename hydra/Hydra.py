@@ -49,21 +49,23 @@ parser.add_argument('--seed', type = int, default = 42, help ='seed')
 parser.add_argument('--train', help='Path to the training dataset (Seurat, SCE or Anndata object)')
 parser.add_argument('--test', help='Path to the test dataset (Seurat or SCE object)')
 parser.add_argument('--celltypecol', default='cell_type', help='Cell type label column in your input dataset (Seurat, SCE or Anndata object). Default: `cell_type`')
-parser.add_argument('--modality', default='rna', required=True, choices=['rna', 'adt', 'atac'], help='Input data modality. Default: `rna`')
+parser.add_argument('--modality', default='rna', choices=['rna', 'adt', 'atac'], help='Input data modality. Default: `rna`')
 parser.add_argument('--base_dir', metavar = 'DIR', default=os.getcwd(), help = 'Path to the directory containing processed data directory. Default: Current working directory')
 parser.add_argument('--gene', help='Name of the gene whose expression is to be highlighted in the plot')
 parser.add_argument('--ctofinterest', help='Name of the cell type for which a ridgeline plot of gene expression should be generated')
 parser.add_argument('--predictions', help='Generate t-SNE plot for Hydra predicted cell types', default=False)
+parser.add_argument('--peak', help='If you are providing peak data for scATAC instead of Gene-activity, filtering will be turned off during data processing. This means that all peaks will be included', default=False)
+parser.add_argument('--processdata_batch_size',  type = int, default = 1000, help = 'batch size for processing reference and query datasets')
 
 
 # Training
-parser.add_argument('--batch_size', type = int, default = 512, help = 'batch size for data processing')
+parser.add_argument('--batch_size', type = int, default = 512, help = 'batch size for processing data during training')
 parser.add_argument('--attr_batch_size', type = int, default = 500, help = 'batch size for feature atrribution. Please adjust this based on your GPU memory')
 parser.add_argument('--epochs', type = int, default = 40, help = 'num of training epochs')
 parser.add_argument('--lr', type = float, default = 0.02, help = 'learning rate')
 
 # GPU specification    
-parser.add_argument('--gpus', type = str, default = '0', help = 'Please specify the GPU to use')    
+parser.add_argument('--gpu', type = str, default = '0', help = 'Please specify the GPU to use')    
 
 # Model
 parser.add_argument('--z_dim', type = int, default = 100, help = 'Number of neurons in latent space')
@@ -89,20 +91,22 @@ parser.add_argument('annotation_args', nargs=argparse.REMAINDER, help='Additiona
 # Parse the command-line arguments
 args = parser.parse_args()
 
-if args.gpus:
-    os.environ["CUDA_VISIBLE_DEVICES"] = args.gpus
+if args.gpu:
+    os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
 
 ##############################################
 # Processing input data
-def run_r_script(train_file, test_file, cell_type_label, data_type):
+def run_r_script(train_file, test_file, cell_type_label, data_type, peak, processdata_batch_size):
     r_command = [
         "Rscript",
         pkg_resources.resource_filename(__name__, 'R/Process_Dataset.R'),
         train_file,
         test_file,
         cell_type_label,
-        data_type
+        data_type,
+        str(peak),
+        str(processdata_batch_size)
     ]
     try:
         subprocess.run(r_command, check=True)
@@ -153,8 +157,8 @@ def create_tsne_Hydra_predictions(rds_file, modality, cell_type_predicted):
 
 ##############################################
 # Query dataset annotation
-def run_annotation_script(annotation_args, modality):
-    annotation_command = ["python", pkg_resources.resource_filename(__name__, 'Annotation.py'), "--modality", modality] + annotation_args
+def run_annotation_script(annotation_args):
+    annotation_command = ["python", pkg_resources.resource_filename(__name__, 'Annotation.py')] + annotation_args
     subprocess.run(annotation_command, check=True)
 
 
@@ -188,7 +192,7 @@ setup_seed(args.seed) ### set seed for reproducbility
 
 print("\nThank you for using Hydra 😄, an interpretable deep generative tool for single-cell multiomics. Please refer to the full documentation available at [xxx] for detailed usage instructions. If you encounter any issues running the tool - Please open an issue on Github, and we will get back to you as soon as possible!!\n\n")
 
-specified_gpus = args.gpus.split(',') if args.gpus else []
+specified_gpus = args.gpu.split(',') if args.gpu else []
 num_gpus_specified = len(specified_gpus)
 
 # If CUDA_VISIBLE_DEVICES is not set, use PyTorch to get the total GPU count.
@@ -215,12 +219,13 @@ def main():
     logging.info("Starting to run")
 
     if args.setting.lower() == 'processdata':
-        if not args.train or not args.test:
-            parser.error("--train and --test are required when --setting is 'processdata'")
+        if not args.train or not args.modality:
+            parser.error("--train and --modality are required when --setting is 'processdata'")
         else:
             # Call the R script to process the data
             logging.info("Processing datasets...")
-            run_r_script(args.train, args.test, args.celltypecol, args.modality)
+            test_file = args.test if args.test else "None"
+            run_r_script(args.train, test_file, args.celltypecol, args.modality, args.peak, args.processdata_batch_size)
 
     elif args.setting.lower() == 'plot':
         if args.predictions:
@@ -275,35 +280,35 @@ def main():
                 args.cty = f"{split_folder}/ct_train.csv"
 
 
-                if args.adt != "NULL" and args.atac != "NULL": # TEAseq
+                if args.adt != "NULL" and args.atac != "NULL": 
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_adt, nfeatures_atac, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
-                    logging.info("The Dataset is: %s" % mode)
+                    logging.info("The Dataset is: RNA+ADT+ATAC")
 
-                if args.adt != "NULL" and args.atac == "NULL": # CITEseq
+                if args.adt != "NULL" and args.atac == "NULL": 
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_adt, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
-                    logging.info("The Dataset is: %s" % mode)
+                    logging.info("The Dataset is: RNA+ADT")
 
-                if args.adt == "NULL" and args.atac != "NULL": # SHAREseq
+                if args.adt == "NULL" and args.atac != "NULL": 
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_atac, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
-                    logging.info("The Dataset is: %s" % mode)
+                    logging.info("The Dataset is: RNA+ATAC")
                                 
                 if args.adt == "NULL" and args.atac == "NULL": # scRNA-seq
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
-                    logging.info("The Dataset is: %s" % mode)
+                    logging.info("The Dataset is: RNA")
 
                 if args.atac == "NULL" and args.rna == "NULL": # scADT-Seq
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_adt, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
-                    logging.info("The Dataset is: %s" % mode)
+                    logging.info("The Dataset is: ADT")
 
                 if args.adt == "NULL" and args.rna == "NULL": # scATAC-Seq
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_atac, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
-                    logging.info("The Dataset is: %s" % mode)
+                    logging.info("The Dataset is: ATAC")
                 
                                 
                 ########## Step 1 ########### 
@@ -374,11 +379,7 @@ def main():
                     Step2_model.classify.load_state_dict(classifier_weights)
 
                     # Move the model to GPU and automatically utilize multiple GPUs if available
-                    if torch.cuda.device_count() > 1:
-                        Step2_model = Step2_model.to(device)
-                        Step2_model = nn.DataParallel(Step2_model)
-                    else:    
-                        Step2_model = Step2_model.to(device)
+                    Step2_model = Step2_model.to(device)
                                                         
                     # Generate Augmented dataset  
                     new_data, new_label, new_label_names = perform_data_augmentation(label_to_name_mapping, train_num, classify_dim, train_label, train_data, model, args)
@@ -666,7 +667,7 @@ def main():
                     fs_results_df.to_csv(os.path.join(Hydra_folder, f'fs.{cell_type_name}_Hydra.csv'), index=False)
     
     elif args.setting.lower() == "annotation":
-        run_annotation_script(args.annotation_args, args.modality)
+        run_annotation_script(args.annotation_args)
 
     logging.info("Completed successfully!")
 
