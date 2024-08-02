@@ -9,8 +9,9 @@ suppressPackageStartupMessages({
     library(ggplot2)
     library(ggridges)
     library(rlang)
+    library(SingleCellExperiment)
+    library(scater)
 })
-
 
 args <- commandArgs(trailingOnly = TRUE)
 dataset <- args[1]
@@ -21,6 +22,10 @@ cell_type_of_interest <- ifelse(length(args) >= 5 && args[5] != "None", args[5],
 
 # Load the dataset
 dataset <- readRDS(dataset)
+
+if (inherits(dataset, "SingleCellExperiment")) {
+    dataset <- as.Seurat(dataset)
+}
 
 # Normalize the data
 dataset <- NormalizeData(dataset)
