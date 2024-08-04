@@ -319,7 +319,7 @@ def get_vae_simulated_data_from_sampling(model, dl):
 def load_and_preprocess_data(args, setting=""):
     if args.adt != "NULL" and args.atac != "NULL":
 
-        mode = "TEAseq"
+        mode = "scRNA+scADT+scATAC"
 
         if setting == 'train':
             train_rna_data_path = args.rna
@@ -377,7 +377,7 @@ def load_and_preprocess_data(args, setting=""):
 
     if args.adt != "NULL" and args.atac == "NULL":
 
-        mode = "CITEseq"
+        mode = "scRNA+scADT"
 
         if setting == 'train':
             train_rna_data_path = args.rna
@@ -429,7 +429,7 @@ def load_and_preprocess_data(args, setting=""):
 
     if args.adt == "NULL" and args.atac != "NULL":
 
-        mode = "SHAREseq"
+        mode = "scRNA+scATAC"
 
         if setting == 'train':
             train_rna_data_path = args.rna
@@ -481,7 +481,7 @@ def load_and_preprocess_data(args, setting=""):
 
     if args.adt == "NULL" and args.atac == "NULL":
 
-        mode = "scRNA-Seq"
+        mode = "scRNA-seq"
 
         if setting == 'train':
             train_rna_data_path = args.rna
@@ -526,7 +526,7 @@ def load_and_preprocess_data(args, setting=""):
     
     if args.rna == "NULL" and args.atac == "NULL":
 
-        mode = "scADT-Seq"
+        mode = "scADT-seq"
 
         if setting == 'train':
             train_adt_data_path = args.adt
@@ -568,7 +568,7 @@ def load_and_preprocess_data(args, setting=""):
 
     if args.rna == "NULL" and args.adt == "NULL":
 
-        mode = "scATAC-Seq"
+        mode = "scATAC-seq"
     
         if setting == 'train':
             train_atac_data_path = args.atac
@@ -608,37 +608,37 @@ def load_and_preprocess_data(args, setting=""):
             test_dl = DataLoader(test_transformed_dataset, batch_size = args.batch_size, shuffle = False, num_workers = 0, drop_last = False)
 
 
-    if mode == "TEAseq":
+    if mode == "scRNA+scADT+scATAC":
         if setting == 'train':
             return train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_adt, nfeatures_atac, feature_num, label_to_name_mapping
         else:
             return test_data, test_dl, test_label, mode, classify_dim, nfeatures_rna, nfeatures_adt, nfeatures_atac, feature_num, label_to_name_mapping
 
-    if mode == "CITEseq":
+    if mode == "scRNA+scADT":
         if setting == 'train':
             return train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_adt, feature_num, label_to_name_mapping
         else:
             return test_data, test_dl, test_label, mode, classify_dim, nfeatures_rna, nfeatures_adt, feature_num, label_to_name_mapping
 
-    if mode == "SHAREseq":
+    if mode == "scRNA+scATAC":
         if setting == 'train':
             return train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_atac, feature_num, label_to_name_mapping
         else:
             return test_data, test_dl, test_label, mode, classify_dim, nfeatures_rna, nfeatures_atac, feature_num, label_to_name_mapping
 
-    if mode == "scRNA-Seq":
+    if mode == "scRNA-seq":
         if setting == 'train':
             return train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, feature_num, label_to_name_mapping
         else:
             return test_data, test_dl, test_label, mode, classify_dim, nfeatures_rna, feature_num, label_to_name_mapping
 
-    if mode == "scADT-Seq":
+    if mode == "scADT-seq":
         if setting == 'train':
             return train_data, train_dl, train_label, mode, classify_dim, nfeatures_adt, feature_num, label_to_name_mapping
         else:
             return test_data, test_dl, test_label, mode, classify_dim, nfeatures_adt, feature_num, label_to_name_mapping
 
-    if mode == "scATAC-Seq":
+    if mode == "scATAC-seq":
         if setting == 'train':
             return train_data, train_dl, train_label, mode, classify_dim, nfeatures_atac, feature_num, label_to_name_mapping
         else:
@@ -718,8 +718,8 @@ def process_data_annotation_train(args, feature_dir, split_folder):
 ##############################################
 
 def process_data_annotation_query(args, feature_dir, split_folder):
-    if args.adt != "NULL" and args.atac != "NULL":
-        mode = "TEAseq"
+    if args.adt != "NULL" and args.atac != "NULL" and args.rna != "NULL":
+        mode = "scRNA+scADT+scATAC"
 
         rna_data_path = args.rna
         adt_data_path = args.adt
@@ -780,7 +780,7 @@ def process_data_annotation_query(args, feature_dir, split_folder):
         test_data = test_data[:, top_feature_indices]
 
     if args.adt != "NULL" and args.atac == "NULL":
-        mode = "CITEseq"
+        mode = "scRNA+scADT"
 
         rna_data_path = args.rna
         adt_data_path = args.adt
@@ -839,7 +839,7 @@ def process_data_annotation_query(args, feature_dir, split_folder):
         test_data = test_data[:, top_feature_indices]
 
     if args.adt == "NULL" and args.atac != "NULL":
-        mode = "SHAREseq"
+        mode = "scRNA+scATAC"
 
         rna_data_path = args.rna
         atac_data_path = args.atac
@@ -899,7 +899,7 @@ def process_data_annotation_query(args, feature_dir, split_folder):
 
     if args.adt == "NULL" and args.atac == "NULL":
 
-        mode = "scRNA-Seq"
+        mode = "scRNA-seq"
 
         rna_data_path = args.rna
 
@@ -956,7 +956,7 @@ def process_data_annotation_query(args, feature_dir, split_folder):
     
     if args.rna == "NULL" and args.atac == "NULL":
 
-        mode = "scADT-Seq"
+        mode = "scADT-seq"
 
         adt_data_path = args.adt
 
@@ -1013,7 +1013,7 @@ def process_data_annotation_query(args, feature_dir, split_folder):
 
     if args.rna == "NULL" and args.adt == "NULL":
 
-        mode = "scATAC-Seq"
+        mode = "scATAC-seq"
 
         atac_data_path = args.atac
 
@@ -1096,7 +1096,6 @@ class NN_Classifier(nn.Module):
 ##############################################
 
 def accuracy(output, target, topk=(1,)):
-    """Computes the accuracy over the k top predictions for the specified values of k"""
     with torch.no_grad():
         target = target.to(device)
 
