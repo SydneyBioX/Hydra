@@ -3,7 +3,8 @@
 </br>
 
 
-![Hydra](https://github.com/user-attachments/assets/28ec9728-c322-40d3-b480-edf614105e34)
+![Fig1](https://github.com/user-attachments/assets/dc83d44a-23e4-4a13-85ae-2acf06712e65)
+
 
 
 
