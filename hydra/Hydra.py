@@ -280,17 +280,17 @@ def main():
                 args.cty = f"{split_folder}/ct_train.csv"
 
 
-                if args.adt != "NULL" and args.atac != "NULL": 
+                if args.adt != "NULL" and args.atac != "NULL": # TEAseq
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_adt, nfeatures_atac, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
                     logging.info("The Dataset is: RNA+ADT+ATAC")
 
-                if args.adt != "NULL" and args.atac == "NULL": 
+                if args.adt != "NULL" and args.atac == "NULL": # CITEseq
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_adt, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
                     logging.info("The Dataset is: RNA+ADT")
 
-                if args.adt == "NULL" and args.atac != "NULL": 
+                if args.adt == "NULL" and args.atac != "NULL": # SHAREseq
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_atac, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
                     logging.info("The Dataset is: RNA+ATAC")
