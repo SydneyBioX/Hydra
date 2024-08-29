@@ -65,7 +65,7 @@ parser.add_argument('--epochs', type = int, default = 40, help = 'num of trainin
 parser.add_argument('--lr', type = float, default = 0.02, help = 'learning rate')
 
 # GPU specification    
-parser.add_argument('--gpu', type = str, default = '0', help = 'Please specify the GPU to use')    
+parser.add_argument('--gpu', type = str, default = '-1', help = 'Please specify the GPU to use')    
 
 # Model
 parser.add_argument('--z_dim', type = int, default = 100, help = 'Number of neurons in latent space')
@@ -178,7 +178,7 @@ from .util import (MyDataset, read_h5_data, Index2Label, read_fs_label,
 
 # Check the device type based on GPU availability, MPS availability, or defaulting to CPU
 device_str = "CUDA" if torch.cuda.is_available() \
-            else "MPS" if getattr(torch, 'has_mps', False)() \
+            else "MPS" if torch.backends.mps.is_built() \
             else "CPU"
 device = torch.device(device_str.lower())
 
@@ -280,51 +280,51 @@ def main():
                 args.cty = f"{split_folder}/ct_train.csv"
 
 
-                if args.adt != "NULL" and args.atac != "NULL": # TEAseq
+                if args.adt != "NULL" and args.atac != "NULL":
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_adt, nfeatures_atac, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
-                    logging.info("The Dataset is: RNA+ADT+ATAC")
+                    logging.info("The Dataset is: scRNA+scADT+scATAC")
 
-                if args.adt != "NULL" and args.atac == "NULL": # CITEseq
+                if args.adt != "NULL" and args.atac == "NULL": 
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_adt, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
-                    logging.info("The Dataset is: RNA+ADT")
+                    logging.info("The Dataset is: scRNA+scADT")
 
-                if args.adt == "NULL" and args.atac != "NULL": # SHAREseq
+                if args.adt == "NULL" and args.atac != "NULL":
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_atac, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
-                    logging.info("The Dataset is: RNA+ATAC")
+                    logging.info("The Dataset is: scRNA+scATAC")
                                 
                 if args.adt == "NULL" and args.atac == "NULL": # scRNA-seq
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
-                    logging.info("The Dataset is: RNA")
+                    logging.info("The Dataset is: scRNA-seq")
 
                 if args.atac == "NULL" and args.rna == "NULL": # scADT-Seq
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_adt, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
-                    logging.info("The Dataset is: ADT")
+                    logging.info("The Dataset is: scADT-seq")
 
                 if args.adt == "NULL" and args.rna == "NULL": # scATAC-Seq
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_atac, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
-                    logging.info("The Dataset is: ATAC")
+                    logging.info("The Dataset is: scATAC-seq")
                 
                                 
                 ########## Step 1 ########### 
 
                 ### Build model
-                if mode == "TEAseq":
+                if mode == "scRNA+scADT+scATAC":
                     model = Autoencoder_TEAseq_Step1(nfeatures_rna, nfeatures_adt, nfeatures_atac, args.hidden_rna, args.hidden_adt, args.hidden_atac, args.z_dim, classify_dim, args.num_models)
-                elif mode == "CITEseq":
+                elif mode == "scRNA+scADT":
                     model = Autoencoder_CITEseq_Step1(nfeatures_rna, nfeatures_adt, args.hidden_rna, args.hidden_adt, args.z_dim, classify_dim, args.num_models)
-                elif mode == "SHAREseq":
+                elif mode == "scRNA+scATAC":
                     model = Autoencoder_SHAREseq_Step1(nfeatures_rna, nfeatures_atac, args.hidden_rna, args.hidden_atac, args.z_dim, classify_dim, args.num_models)
-                elif mode == "scRNA-Seq":
+                elif mode == "scRNA-seq":
                     model = Autoencoder_RNAseq_Step1(nfeatures_rna, args.hidden_rna, args.z_dim, classify_dim, args.num_models)
-                elif mode == "ADT-Seq":
+                elif mode == "scADT-seq":
                     model = Autoencoder_ADTseq_Step1(nfeatures_adt, args.hidden_adt, args.z_dim, classify_dim, args.num_models)
-                elif mode == "ATAC-Seq":
+                elif mode == "scATAC-seq":
                     model = Autoencoder_ATACseq_Step1(nfeatures_atac, args.hidden_atac, args.z_dim, classify_dim, args.num_models)
 
 
@@ -353,17 +353,17 @@ def main():
 
                     logging.info("\n\nRefining Model: %s", modelI+1)
                     
-                    if mode == "TEAseq":
+                    if mode == "scRNA+scADT+scATAC":
                         Step2_model = Autoencoder_TEAseq_Step2(nfeatures_rna, nfeatures_adt, nfeatures_atac, args.hidden_rna, args.hidden_adt, args.hidden_atac, args.z_dim, classify_dim)
-                    elif mode == "CITEseq":
+                    elif mode == "scRNA+scADT":
                         Step2_model = Autoencoder_CITEseq_Step2(nfeatures_rna, nfeatures_adt, args.hidden_rna, args.hidden_adt, args.z_dim, classify_dim)
-                    elif mode == "SHAREseq":
+                    elif mode == "scRNA+scATAC":
                         Step2_model = Autoencoder_SHAREseq_Step2(nfeatures_rna, nfeatures_atac, args.hidden_rna, args.hidden_atac, args.z_dim, classify_dim)
-                    elif mode == "scRNA-Seq":
+                    elif mode == "scRNA-seq":
                         Step2_model = Autoencoder_RNAseq_Step2(nfeatures_rna, args.hidden_rna, args.z_dim, classify_dim)
-                    elif mode == "scADT-Seq":
+                    elif mode == "scADT-seq":
                         Step2_model = Autoencoder_ADTseq_Step2(nfeatures_adt, args.hidden_adt, args.z_dim, classify_dim)
-                    elif mode == "scATAC-Seq":
+                    elif mode == "scATAC-seq":
                         Step2_model = Autoencoder_ATACseq_Step2(nfeatures_atac, args.hidden_atac, args.z_dim, classify_dim)
 
                     # Load the encoder weights trained from Step 1 
@@ -453,8 +453,8 @@ def main():
 
                 classify_dim = (max(label)+1).cpu().numpy()
 
-                if adt_data_path != "NULL" and atac_data_path != "NULL":
-                    mode = "TEAseq"
+                if adt_data_path != "NULL" and atac_data_path != "NULL" and rna_data_path != "NULL":
+                    mode = "scRNA+scADT+scATAC"
 
                     rna_name = h5py.File(rna_data_path, "r")['matrix/features'][:]
                     adt_name = h5py.File(adt_data_path, "r")['matrix/features'][:]
@@ -478,7 +478,7 @@ def main():
                     data_noscale = torch.cat((rna_data_noscale, adt_data_noscale, atac_data_noscale), 1)
                 
                 if adt_data_path != "NULL" and atac_data_path == "NULL":
-                    mode = "CITEseq"
+                    mode = "scRNA+scADT"
 
                     rna_name = h5py.File(rna_data_path, "r")['matrix/features'][:]
                     adt_name = h5py.File(adt_data_path, "r")['matrix/features'][:]
@@ -498,7 +498,7 @@ def main():
                     data_noscale = torch.cat((rna_data_noscale, adt_data_noscale), 1)
                 
                 if adt_data_path == "NULL" and atac_data_path != "NULL":
-                    mode = "SHAREseq"
+                    mode = "scRNA+scATAC"
 
                     rna_name = h5py.File(rna_data_path, "r")['matrix/features'][:]
                     atac_name = h5py.File(atac_data_path, "r")['matrix/features'][:]
@@ -518,7 +518,7 @@ def main():
                     data_noscale = torch.cat((rna_data_noscale, atac_data_noscale), 1)
                 
                 if adt_data_path == "NULL" and atac_data_path == "NULL":
-                    mode = "scRNA-Seq"
+                    mode = "scRNA-seq"
 
                     rna_name = h5py.File(rna_data_path, "r")['matrix/features'][:]
 
@@ -532,24 +532,41 @@ def main():
                     data = rna_data
                     data_noscale = rna_data_noscale
 
+                if rna_data_path == "NULL" and atac_data_path == "NULL":
+                    mode = "scADT-seq"
 
-                for i in range(nfeatures_rna):
-                    a = str(rna_name[i], encoding="utf-8") + "_RNA_"
-                    rna_name_new.append(a)
+                    adt_name = h5py.File(adt_data_path, "r")['matrix/features'][:]
 
-                if mode == "CITEseq":
-                    for i in range(nfeatures_adt):
-                        a = str(adt_name[i], encoding="utf-8") + "_ADT_"
-                        adt_name_new.append(a)
-                    features = rna_name_new + adt_name_new
+                    adt_data = read_h5_data(adt_data_path)
+                    adt_data_noscale = read_h5_data(adt_data_path_noscale)
 
-                if mode == "SHAREseq":
-                    for i in range(nfeatures_atac):
-                        a = str(atac_name[i], encoding="utf-8") + "_ATAC_"
-                        atac_name_new.append(a)
-                    features = rna_name_new + atac_name_new
+                    nfeatures_adt = adt_data.shape[1]
 
-                if mode == "TEAseq":
+                    feature_num = nfeatures_adt
+
+                    data = adt_data
+                    data_noscale = adt_data_noscale
+                
+                if rna_data_path == "NULL" and atac_data_path == "NULL":
+                    mode = "scATAC-seq"
+
+                    atac_name = h5py.File(atac_data_path, "r")['matrix/features'][:]
+
+                    atac_data = read_h5_data(atac_data_path)
+                    atac_data_noscale = read_h5_data(atac_data_path_noscale)
+
+                    nfeatures_atac = atac_data.shape[1]
+
+                    feature_num = nfeatures_atac
+
+                    data = atac_data
+                    data_noscale = atac_data_noscale
+
+
+                if mode == "scRNA+scADT+scATAC":
+                    for i in range(nfeatures_rna):
+                        a = str(rna_name[i], encoding="utf-8") + "_RNA_"
+                        rna_name_new.append(a)
                     for i in range(nfeatures_adt):
                         a = str(adt_name[i], encoding="utf-8") + "_ADT_"
                         adt_name_new.append(a)
@@ -557,9 +574,42 @@ def main():
                         a = str(atac_name[i], encoding="utf-8") + "_ATAC_"
                         atac_name_new.append(a)
                     features = rna_name_new + adt_name_new + atac_name_new
+
+                if mode == "scRNA+scADT":
+                    for i in range(nfeatures_rna):
+                        a = str(rna_name[i], encoding="utf-8") + "_RNA_"
+                        rna_name_new.append(a)
+                    for i in range(nfeatures_adt):
+                        a = str(adt_name[i], encoding="utf-8") + "_ADT_"
+                        adt_name_new.append(a)
+                    features = rna_name_new + adt_name_new
+
+                if mode == "scRNA+scATAC":
+                    for i in range(nfeatures_rna):
+                        a = str(rna_name[i], encoding="utf-8") + "_RNA_"
+                        rna_name_new.append(a)
+                    for i in range(nfeatures_atac):
+                        a = str(atac_name[i], encoding="utf-8") + "_ATAC_"
+                        atac_name_new.append(a)
+                    features = rna_name_new + atac_name_new
                 
-                if mode == "scRNA-Seq":
+                if mode == "scRNA-seq":
+                    for i in range(nfeatures_rna):
+                        a = str(rna_name[i], encoding="utf-8") + "_RNA_"
+                        rna_name_new.append(a)
                     features = rna_name_new
+
+                if mode == "scADT-seq":
+                    for i in range(nfeatures_adt):
+                        a = str(adt_name[i], encoding="utf-8") + "_ADT_"
+                        adt_name_new.append(a)
+                    features = adt_name_new
+                
+                if mode == "scATAC-seq":
+                    for i in range(nfeatures_atac):
+                        a = str(atac_name[i], encoding="utf-8") + "_ATAC_"
+                        atac_name_new.append(a)
+                    features = atac_name_new
 
                 # Load all model files
                 model_files = glob.glob(os.path.join(model_save_path, f'Final_Models-{args.num_models}/*.pth.tar'))
@@ -598,17 +648,17 @@ def main():
 
                     # Compute the attribution for each cell of the current cell type
                     for model_file in model_files:
-                        if mode == "CITEseq":
-                            model_test = Autoencoder_CITEseq_Step2(nfeatures_rna, nfeatures_adt, args.hidden_rna, args.hidden_adt, args.z_dim, classify_dim)
-                        elif mode == "SHAREseq":
-                            model_test = Autoencoder_SHAREseq_Step2(nfeatures_rna, nfeatures_atac, args.hidden_rna, args.hidden_atac, args.z_dim, classify_dim)
-                        elif mode == "TEAseq":
+                        if mode == "scRNA+scADT+scATAC":
                             model_test = Autoencoder_TEAseq_Step2(nfeatures_rna, nfeatures_adt, nfeatures_atac, args.hidden_rna, args.hidden_adt, args.hidden_atac, args.z_dim, classify_dim)
-                        elif mode == "scRNA-Seq":
+                        elif mode == "scRNA+scADT":
+                            model_test = Autoencoder_CITEseq_Step2(nfeatures_rna, nfeatures_adt, args.hidden_rna, args.hidden_adt, args.z_dim, classify_dim)
+                        elif mode == "scRNA+scATAC":
+                            model_test = Autoencoder_SHAREseq_Step2(nfeatures_rna, nfeatures_atac, args.hidden_rna, args.hidden_atac, args.z_dim, classify_dim)
+                        elif mode == "scRNA-seq":
                             model_test = Autoencoder_RNAseq_Step2(nfeatures_rna, args.hidden_rna, args.z_dim, classify_dim)
-                        elif mode == "scADT-Seq":
+                        elif mode == "scADT-seq":
                             model_test = Autoencoder_ADTseq_Step2(nfeatures_adt, args.hidden_adt, args.z_dim, classify_dim)
-                        elif mode == "scATAC-Seq":
+                        elif mode == "scATAC-seq":
                             model_test = Autoencoder_ATACseq_Step2(nfeatures_atac, args.hidden_atac, args.z_dim, classify_dim)
 
                         # Load the model's weights
@@ -624,7 +674,7 @@ def main():
                         Attr_batch_size = args.attr_batch_size
 
                         # Initialize the attributions tensor
-                        attribution = torch.zeros(1, feature_num).cuda()
+                        attribution = torch.zeros(1, feature_num).to(device)
 
                         # Calculate the attributions in batches
                         for j in range(0, train_data_each_celltype_fs.size(0), Attr_batch_size):
