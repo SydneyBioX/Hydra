@@ -1,5 +1,11 @@
-# Manoj M Wagle (USydney; CMRI)
+#!/usr/bin/python
+
 ##############################################
+
+# Manoj M Wagle (USydney; CMRI)
+
+##############################################
+
 
 from setuptools import setup, find_namespace_packages
 import subprocess
