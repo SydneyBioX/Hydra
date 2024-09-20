@@ -125,7 +125,7 @@ preprocess_dataset_train <- function(dataset_file, cell_type_label, batch_size =
     rm(dataset)
     gc()
   } else if (any(grepl("anndata", class(dataset)))) {
-    obs_colnames <- py_to_r(dataset$obs$columns)
+    obs_colnames <- py_to_r(dataset$obs$columns$to_list())
     if (!cell_type_label %in% obs_colnames) {
       stop(glue("The specified cell type label column '{cell_type_label}' does not exist in the AnnData object. Please specify the correct column that corresponds to cell type labels in your reference dataset."))
     }
