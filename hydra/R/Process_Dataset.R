@@ -125,12 +125,13 @@ preprocess_dataset_train <- function(dataset_file, cell_type_label, batch_size =
     rm(dataset)
     gc()
   } else if (any(grepl("anndata", class(dataset)))) {
-    obs_colnames <- py_to_r(dataset$obs$columns$to_list())
+    obs_r <- reticulate::py_to_r(dataset$obs)
+    obs_colnames <- colnames(obs_r)
     if (!cell_type_label %in% obs_colnames) {
       stop(glue("The specified cell type label column '{cell_type_label}' does not exist in the AnnData object. Please specify the correct column that corresponds to cell type labels in your reference dataset."))
     }
-    assay_data <- dataset$X$toarray()
-    cell_type_vector <- dataset$obs[[cell_type_label]]$to_list()
+    assay_data <- dataset$X
+    cell_type_vector <- as.character(obs_r[[cell_type_label]])
     
     # Filtering logic if peak is FALSE
     if (!peak) {
@@ -214,8 +215,8 @@ preprocess_dataset_test <- function(dataset_file, batch_size = 1000) {
     rm(assay_data)
     rm(dataset)
     gc()
-  } else if (inherits(dataset, "Anndata")) {
-    assay_data <- dataset$X$toarray()
+  } else if (any(grepl("anndata", class(dataset)))) {
+    assay_data <- dataset$X
 
     # Filtering logic if peak is FALSE
     if (!peak) {
