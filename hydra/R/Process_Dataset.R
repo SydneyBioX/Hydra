@@ -124,7 +124,7 @@ preprocess_dataset_train <- function(dataset_file, cell_type_label, batch_size =
     rm(assay_data)
     rm(dataset)
     gc()
-  } else if (inherits(dataset, "Anndata")) {
+  } else if (inherits(dataset, "AnnData")) {
     if (!cell_type_label %in% colnames(dataset$obs)) {
       stop(glue("The specified cell type label column '{cell_type_label}' does not exist in the AnnData object. Please specify the correct column that corresponds to cell type labels in your reference dataset."))
     }
