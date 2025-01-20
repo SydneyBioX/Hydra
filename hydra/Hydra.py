@@ -2,7 +2,7 @@
 
 ##############################################
 
-# Manoj M Wagle (USydney; CMRI)
+# Manoj M Wagle (USydney)
 
 ##############################################
 
@@ -54,7 +54,7 @@ parser.add_argument('--base_dir', metavar = 'DIR', default=os.getcwd(), help = '
 parser.add_argument('--gene', help='Name of the gene whose expression is to be highlighted in the plot')
 parser.add_argument('--ctofinterest', help='Name of the cell type for which a ridgeline plot of gene expression should be generated')
 parser.add_argument('--predictions', help='Generate t-SNE plot for Hydra predicted cell types', default=False)
-parser.add_argument('--peak', help='If you are providing peak data for scATAC instead of Gene-activity, filtering will be turned off during data processing. This means that all peaks will be included', default=False)
+# parser.add_argument('--peak', help='If you are providing peak data for scATAC instead of Gene-activity, filtering will be turned off during data processing. This means that all peaks will be included', default=False)
 parser.add_argument('--processdata_batch_size',  type = int, default = 1000, help = 'batch size for processing reference and query datasets')
 
 
@@ -65,7 +65,7 @@ parser.add_argument('--epochs', type = int, default = 40, help = 'num of trainin
 parser.add_argument('--lr', type = float, default = 0.02, help = 'learning rate')
 
 # GPU specification    
-parser.add_argument('--gpu', type = str, default = '-1', help = 'Please specify the GPU to use')    
+parser.add_argument('--gpu', type = str, default = '0', help = 'Please specify the GPU to use')    
 
 # Model
 parser.add_argument('--z_dim', type = int, default = 100, help = 'Number of neurons in latent space')
@@ -97,7 +97,7 @@ if args.gpu:
 
 ##############################################
 # Processing input data
-def run_r_script(train_file, test_file, cell_type_label, data_type, peak, processdata_batch_size):
+def run_r_script(train_file, test_file, cell_type_label, data_type, processdata_batch_size):
     r_command = [
         "Rscript",
         pkg_resources.resource_filename(__name__, 'R/Process_Dataset.R'),
@@ -105,7 +105,7 @@ def run_r_script(train_file, test_file, cell_type_label, data_type, peak, proces
         test_file,
         cell_type_label,
         data_type,
-        str(peak),
+        # str(peak),
         str(processdata_batch_size)
     ]
     try:
@@ -205,8 +205,7 @@ else:
 active_gpu_indices = os.environ.get("CUDA_VISIBLE_DEVICES", "").split(',')
 
 if num_gpus >= 1 and (device_str == "CPU" or device_str == "MPS"):
-    print("It seems the CPU version of PyTorch is installed. For GPU utilization, \
-        please install the GPU version of PyTorch. Currently, running on CPU!!!")
+    print("It seems the CPU version of PyTorch is installed. For GPU utilization, we recommend using the GPU version of PyTorch.")
     
 print("===============================\n")
 print("Device to be used:", device_str, "\n")
@@ -225,7 +224,7 @@ def main():
             # Call the R script to process the data
             logging.info("Processing datasets...")
             test_file = args.test if args.test else "None"
-            run_r_script(args.train, test_file, args.celltypecol, args.modality, args.peak, args.processdata_batch_size)
+            run_r_script(args.train, test_file, args.celltypecol, args.modality, args.processdata_batch_size)
 
     elif args.setting.lower() == 'plot':
         if args.predictions:
