@@ -2,7 +2,7 @@
 
 ##############################################
 
-# Manoj M Wagle (USydney)
+# Manoj M Wagle (USydney; CMRI)
 
 ##############################################
 
@@ -339,7 +339,7 @@ def main():
                 checkpoint_tar = os.path.join(model_save_path, 'Original_Model.pth.tar')
                 if os.path.exists(checkpoint_tar):
                     # Load the model's weights
-                    checkpoint = torch.load(checkpoint_tar)
+                    checkpoint = torch.load(checkpoint_tar, weights_only=False)
                     model = model.module if isinstance(model, nn.DataParallel) else model
                     model.load_state_dict(checkpoint['state_dict'], strict=True)
 
@@ -661,7 +661,7 @@ def main():
                             model_test = Autoencoder_ATACseq_Step2(nfeatures_atac, args.hidden_atac, args.z_dim, classify_dim)
 
                         # Load the model's weights
-                        checkpoint = torch.load(model_file)
+                        checkpoint = torch.load(model_file, weights_only=False)
                         model_test.load_state_dict(checkpoint['state_dict'], strict=True)
 
                         model_test = model_test.to(device)
