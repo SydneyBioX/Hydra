@@ -6,78 +6,79 @@
 
 ###############################################
 
-
 suppressPackageStartupMessages({
-    library(Seurat)
     library(ggplot2)
+    library(data.table)
     library(ggridges)
     library(rlang)
-    library(SingleCellExperiment)
-    library(scater)
 })
 
 args <- commandArgs(trailingOnly = TRUE)
 dataset_path <- args[1]              
 modality <- args[2]                   
 cell_type_label <- args[3]           
-gene_name <- ifelse(args[4] == "None", NA, args[4])   # Gene name for expression plotting
-cell_type_of_interest <- ifelse(length(args) >= 5 && args[5] != "None", args[5], NA)  # Specific cell type
+gene_name <- ifelse(args[4] == "None", NA, args[4])   
+cell_type_of_interest <- ifelse(length(args) >= 5 && args[5] != "None", args[5], NA)  
 
-# Determine file type based on extension
 file_ext <- tools::file_ext(dataset_path)
 
 # Load dataset based on file type
 if (tolower(file_ext) == "rds") {
-    # Load Seurat-specific packages
     suppressPackageStartupMessages({
         library(Seurat)
-        library(SingleCellExperiment)
         library(scater)
     })
     
-    # Load Seurat object
     dataset <- readRDS(dataset_path)
     if (inherits(dataset, "SingleCellExperiment")) {
+        library(Seurat)
+        library(SingleCellExperiment)
         dataset <- as.Seurat(dataset)
     }
     
-} else if (tolower(file_ext) %in% c("h5ad", "h5")) {
-    # Load AnnData-specific packages
-    suppressPackageStartupMessages({
-        library(anndata)
-        library(zellkonverter)
-    })
+} else if (tolower(file_ext) %in% c("h5ad")) {
+    library(reticulate)
+    anndata <- import("anndata", convert = FALSE)
     
-    # Read AnnData object
-    adata <- anndata::read_h5ad(dataset_path)
+    adata <- anndata$read_h5ad(dataset_path)
+
+    if (py_has_attr(adata$X, "toarray")) {
+        assay_data <- t(py_to_r(adata$X$toarray()))  
+    } else {
+        assay_data <- t(py_to_r(adata$X))  
+    }
     
-    # Convert AnnData to Seurat
-    dataset <- zellkonverter::as.Seurat(adata)
+    gene_names <- py_to_r(adata$var$index$to_list())
+    rownames(assay_data) <- gene_names
+
+    cell_names <- py_to_r(adata$obs$index$to_list())
+    colnames(assay_data) <- cell_names
+
+    column_exists <-  py_to_r(dataset$obs$columns$`__contains__`(cell_type_label))
+    if (column_exists) {
+        cell_type_vector <- py_to_r(adata$obs[[cell_type_label]]$to_list())
+        meta_data <- data.frame(cell_type = cell_type_vector, row.names = cell_names, stringsAsFactors = FALSE)
+    } else {
+        warning(paste("Cell type label", cell_type_label, "not found in AnnData object metadata. Proceeding without it."))
+    }
+    
+     dataset <- CreateSeuratObject(counts = assay_data, meta.data = meta_data, project = "SeuratProject", assay = modality)
     
 } else {
-    stop("Unsupported file format. Please provide a .rds (Seurat) or .h5ad (AnnData) file.")
+    stop("Unsupported file format. Please provide a .rds or .h5ad file.")
+    quit()
 }
 
-# Normalize the data
 dataset <- NormalizeData(dataset)
-
-# Find variable features
 dataset <- FindVariableFeatures(dataset)
-
-# Scale the data
 dataset <- ScaleData(dataset)
-
-# Run PCA
 dataset <- RunPCA(dataset, features = VariableFeatures(object = dataset))
-
-# Run UMAP instead of t-SNE
 dataset <- RunUMAP(dataset, dims = 1:10)
 
-# Define a common theme for plots without gridlines
 common_theme <- theme_bw() +
     theme(
-        panel.grid.major = element_blank(),    # Remove major gridlines
-        panel.grid.minor = element_blank(),    # Remove minor gridlines
+        panel.grid.major = element_blank(),    
+        panel.grid.minor = element_blank(),    
         axis.line = element_blank(),
         axis.ticks = element_blank(),
         axis.text = element_blank(),
@@ -94,10 +95,9 @@ if (cell_type_label %in% colnames(dataset@meta.data)) {
         alpha = 1, 
         raster = FALSE
     ) +
-        ggtitle("UMAP Plot Colored by Cell Types") +
+        ggtitle("UMAP plot colored by cell types") +
         common_theme
 } else {
-    # If cell type label does not exist, perform clustering
     suppressPackageStartupMessages({
         library(Seurat)
     })
@@ -111,17 +111,15 @@ if (cell_type_label %in% colnames(dataset@meta.data)) {
         alpha = 1, 
         raster = FALSE
     ) +
-        ggtitle("UMAP Plot Colored by Clusters") +
+        ggtitle("UMAP plot colored by clusters") +
         common_theme
 }
 
-# Create the output directory if it doesn't exist
 output_dir <- "Results/Plots"
 if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE)
 }
 
-# Save the UMAP plot at 300 DPI
 ggsave(
     filename = file.path(output_dir, paste0("umap_cell_types_", modality, ".png")),
     plot = umap_plot,
@@ -145,9 +143,8 @@ if (!is.na(gene_name)) {
             raster = FALSE
         ) +
             scale_color_gradient(low = "lightgrey", high = "red", name = "Log-normalized\nexpression") +
-            ggtitle(paste("UMAP Plot of", gene_name, "Expression")) +
+            ggtitle(paste("UMAP plot of", gene_name, "expression")) +
             common_theme
-        # Save the gene expression UMAP plot at 300 DPI
         ggsave(
             filename = file.path(output_dir, paste0("umap_gene_expression_", gene_name, ".png")),
             plot = gene_plot,
@@ -180,7 +177,7 @@ if (!is.na(cell_type_of_interest) && !is.na(gene_name)) {
             labs(
                 x = "Log-normalized expression",
                 y = "Cell type",
-                title = paste("Expression Distribution of", gene_name)
+                title = paste("Expression distribution of", gene_name)
             ) +
             ggridges::theme_ridges(grid = FALSE) +
             theme(
