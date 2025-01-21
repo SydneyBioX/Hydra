@@ -234,14 +234,14 @@ def main():
                 parser.error("--test, --modality and --ctpredictions are required when --setting is 'plot' and --predictions is True")
             else:
                 # Call the R script to create UMAP plots with predicted cell types
-                logging.info("Generating UMAP plot of Hydra predicted cell type labels...")
+                logging.info("Generating plot for Hydra predicted cell types...")
                 create_UMAP_Hydra_predictions(args.test, args.modality, args.ctpredictions)
         else:    
             if not args.train or not args.modality:
                 parser.error("--train and --modality are required when --setting is 'UMAPplot'")
             else:
                 # Call the R script to create UMAP plots
-                logging.info("Generating UMAP plot...")
+                logging.info("Generating plot...")
                 create_UMAP_plots(args.train, args.modality, args.celltypecol, args.gene, args.ctofinterest)
 
     elif args.setting.lower() == 'fs':
