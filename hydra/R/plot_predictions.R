@@ -22,7 +22,6 @@ file_ext <- tools::file_ext(dataset_path)
 
 # Load dataset based on file type
 if (tolower(file_ext) == "rds") {
-    # Load Seurat-specific packages
     suppressPackageStartupMessages({
         library(Seurat)
         library(SingleCellExperiment)
@@ -35,7 +34,6 @@ if (tolower(file_ext) == "rds") {
     }
     
 } else if (tolower(file_ext) %in% c("h5ad")) {
-    # Load AnnData-specific packages
     suppressPackageStartupMessages({
         library(anndata)
         library(zellkonverter)
@@ -50,12 +48,12 @@ if (tolower(file_ext) == "rds") {
     stop("Unsupported file format. Please provide a .rds or .h5ad file.")
 }
 
-# Read the predicted cell types from the CSV file
 predicted_labels <- fread(cell_type_predicted)
 
 # Ensure row names match and add predicted labels
 predicted_labels <- predicted_labels[order(as.numeric(rownames(predicted_labels))),]
 
+# Add predicted cell type labels to the Seurat object
 if (!"x" %in% colnames(predicted_labels)) {
     stop("Predicted labels CSV must contain a column named 'x' with cell type predictions.")
     quit()
@@ -90,6 +88,7 @@ umap_plot <- DimPlot(
     ggtitle("UMAP Plot of Predicted Cell Types") +
     common_theme
 
+# Create the output directory if it doesn't exist
 output_dir <- "Results/Plots"
 if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE)
