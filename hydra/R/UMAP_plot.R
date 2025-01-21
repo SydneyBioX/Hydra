@@ -60,7 +60,8 @@ if (tolower(file_ext) == "rds") {
     column_exists <-  py_to_r(adata$obs$columns$`__contains__`(cell_type_label))
     if (column_exists) {
         cell_type_vector <- py_to_r(adata$obs[[cell_type_label]]$to_list())
-        meta_data <- data.frame(cell_type = cell_type_vector, row.names = cell_names, stringsAsFactors = FALSE)
+        meta_data <- data.frame(row.names = cell_names, stringsAsFactors = FALSE)
+        meta_data[[cell_type_label]] <- cell_type_vector
     } else {
         warning(paste("Cell type label", cell_type_label, "not found in AnnData object metadata. Proceeding without it."))
     }
