@@ -6,7 +6,6 @@
 
 ###############################################
 
-
 suppressPackageStartupMessages({
     library(ggplot2)
     library(data.table)
@@ -24,40 +23,44 @@ file_ext <- tools::file_ext(dataset_path)
 if (tolower(file_ext) == "rds") {
     suppressPackageStartupMessages({
         library(Seurat)
-        library(SingleCellExperiment)
         library(scater)
     })
     
     dataset <- readRDS(dataset_path)
     if (inherits(dataset, "SingleCellExperiment")) {
+        library(Seurat)
+        library(SingleCellExperiment)
         dataset <- as.Seurat(dataset)
     }
     
 } else if (tolower(file_ext) %in% c("h5ad")) {
     suppressPackageStartupMessages({
-        library(anndata)
-        library(zellkonverter)
+        library(reticulate)
+        library(Seurat)
     })
+    anndata <- import("anndata", convert = FALSE)
     
-    adata <- anndata::read_h5ad(dataset_path)
+    adata <- anndata$read_h5ad(dataset_path)
+
+    if (py_has_attr(adata$X, "toarray")) {
+        assay_data <- t(py_to_r(adata$X$toarray()))  
+    } else {
+        assay_data <- t(py_to_r(adata$X))  
+    }
     
-    # Convert AnnData to Seurat
-    dataset <- zellkonverter::as.Seurat(adata)
+    gene_names <- py_to_r(adata$var$index$to_list())
+    rownames(assay_data) <- gene_names
+
+    cell_names <- py_to_r(adata$obs$index$to_list())
+    colnames(assay_data) <- cell_names
+
+    dataset <- CreateSeuratObject(counts = assay_data, project = "SeuratProject", assay = modality)
     
 } else {
     stop("Unsupported file format. Please provide a .rds or .h5ad file.")
 }
 
-predicted_labels <- fread(cell_type_predicted)
-
-# Ensure row names match and add predicted labels
-predicted_labels <- predicted_labels[order(as.numeric(rownames(predicted_labels))),]
-
-# Add predicted cell type labels to the Seurat object
-if (!"x" %in% colnames(predicted_labels)) {
-    stop("Predicted labels CSV must contain a column named 'x' with cell type predictions.")
-    quit()
-}
+predicted_labels <- read.csv(cell_type_predicted)
 dataset$predicted_cell_type <- predicted_labels$x
 
 dataset <- NormalizeData(dataset)
@@ -85,10 +88,9 @@ umap_plot <- DimPlot(
     alpha = 1, 
     raster = FALSE
 ) +
-    ggtitle("UMAP Plot of Predicted Cell Types") +
+    ggtitle("UMAP plot of Hydra predicted cell types") +
     common_theme
 
-# Create the output directory if it doesn't exist
 output_dir <- "Results/Plots"
 if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE)
