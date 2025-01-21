@@ -54,7 +54,7 @@ if (tolower(file_ext) == "rds") {
     cell_names <- py_to_r(adata$obs$index$to_list())
     colnames(assay_data) <- cell_names
 
-    column_exists <-  py_to_r(dataset$obs$columns$`__contains__`(cell_type_label))
+    column_exists <-  py_to_r(adata$obs$columns$`__contains__`(cell_type_label))
     if (column_exists) {
         cell_type_vector <- py_to_r(adata$obs[[cell_type_label]]$to_list())
         meta_data <- data.frame(cell_type = cell_type_vector, row.names = cell_names, stringsAsFactors = FALSE)
