@@ -2,7 +2,7 @@
 
 ##############################################
 
-# Manoj M Wagle (USydney; CMRI)
+# Manoj M Wagle (USydney)
 
 ##############################################
 
@@ -53,7 +53,8 @@ parser.add_argument('--modality', default='rna', choices=['rna', 'adt', 'atac'],
 parser.add_argument('--base_dir', metavar = 'DIR', default=os.getcwd(), help = 'Path to the directory containing processed data directory. Default: Current working directory')
 parser.add_argument('--gene', help='Name of the gene whose expression is to be highlighted in the plot')
 parser.add_argument('--ctofinterest', help='Name of the cell type for which a ridgeline plot of gene expression should be generated')
-parser.add_argument('--predictions', help='Generate t-SNE plot for Hydra predicted cell types', default=False)
+parser.add_argument('--predictions', help='Generate UMAP plot for Hydra predicted cell types', default=False)
+parser.add_argument('--ctpredictions', help='Path to the csv file containing cell types predicted by Hydra', default=False)
 # parser.add_argument('--peak', help='If you are providing peak data for scATAC instead of Gene-activity, filtering will be turned off during data processing. This means that all peaks will be included', default=False)
 parser.add_argument('--processdata_batch_size',  type = int, default = 1000, help = 'batch size for processing reference and query datasets')
 
@@ -80,7 +81,7 @@ parser.add_argument('--setting', type=str, required=True,
     help=(
         "`processdata` for processing input train and test Seurat, SCE or Anndata objects;\n"
         "`fs` for feature selection to obtain cell-identity genes;\n"
-        "`plot` for generating t-SNE plot of the dataset (Additionally, highlights gene expression when called with the `--gene` argument; Generates a ridgeline plot of expression of the specified gene in cell type of interest vs all other cell types when called with `--ctofinterest` argument; Generates a t-SNE plot of Hydra predicted labels when called with `--predictions` argument);\n"
+        "`plot` for generating UMAP plot of the dataset (Additionally, highlights gene expression when called with the `--gene` argument; Generates a ridgeline plot of expression of the specified gene in cell type of interest vs all other cell types when called with `--ctofinterest` argument; Generates a UMAP plot of Hydra predicted labels when called with `--predictions` argument);\n"
         "`annotation` for automated annotation of the query dataset\n\n"
     )
 )
@@ -116,10 +117,10 @@ def run_r_script(train_file, test_file, cell_type_label, data_type, processdata_
 
 
 ##############################################
-def create_tsne_plots(rds_file, modality, celltypecol, gene_name=None, ctofinterest=None):
+def create_UMAP_plots(rds_file, modality, celltypecol, gene_name=None, ctofinterest=None):
     r_command = [
         "Rscript",
-        pkg_resources.resource_filename(__name__, 'R/tsne_plot.R'),
+        pkg_resources.resource_filename(__name__, 'R/UMAP_plot.R'),
         rds_file,
         modality,
         celltypecol,
@@ -137,7 +138,7 @@ def create_tsne_plots(rds_file, modality, celltypecol, gene_name=None, ctofinter
 
 
 ##############################################
-def create_tsne_Hydra_predictions(rds_file, modality, cell_type_predicted):
+def create_UMAP_Hydra_predictions(rds_file, modality, cell_type_predicted):
     r_command = [
         "Rscript",
         pkg_resources.resource_filename(__name__, 'R/plot_predictions.R'),
@@ -205,7 +206,8 @@ else:
 active_gpu_indices = os.environ.get("CUDA_VISIBLE_DEVICES", "").split(',')
 
 if num_gpus >= 1 and (device_str == "CPU" or device_str == "MPS"):
-    print("It seems the CPU version of PyTorch is installed. For GPU utilization, we recommend using the GPU version of PyTorch.")
+    print("It seems the CPU version of PyTorch is installed. For GPU utilization, \
+        please install the GPU version of PyTorch. Currently, running on CPU!!!")
     
 print("===============================\n")
 print("Device to be used:", device_str, "\n")
@@ -228,19 +230,19 @@ def main():
 
     elif args.setting.lower() == 'plot':
         if args.predictions:
-            if not args.test or not args.modality or not args.celltypecol:
-                parser.error("--test, --modality and --celltypecol are required when --setting is 'plot' and --predictions is True")
+            if not args.test or not args.modality or not args.ctpredictions:
+                parser.error("--test, --modality and --ctpredictions are required when --setting is 'plot' and --predictions is True")
             else:
-                # Call the R script to create t-SNE plots with predicted cell types
-                logging.info("Generating t-SNE plot of Hydra predicted cell type labels...")
-                create_tsne_Hydra_predictions(args.test, args.modality, args.celltypecol)
+                # Call the R script to create UMAP plots with predicted cell types
+                logging.info("Generating UMAP plot of Hydra predicted cell type labels...")
+                create_UMAP_Hydra_predictions(args.test, args.modality, args.ctpredictions)
         else:    
             if not args.train or not args.modality:
-                parser.error("--train and --modality are required when --setting is 'tsneplot'")
+                parser.error("--train and --modality are required when --setting is 'UMAPplot'")
             else:
-                # Call the R script to create t-SNE plots
-                logging.info("Generating t-SNE plot...")
-                create_tsne_plots(args.train, args.modality, args.celltypecol, args.gene, args.ctofinterest)
+                # Call the R script to create UMAP plots
+                logging.info("Generating UMAP plot...")
+                create_UMAP_plots(args.train, args.modality, args.celltypecol, args.gene, args.ctofinterest)
 
     elif args.setting.lower() == 'fs':
         dataset_folder_path = os.path.join(args.base_dir, "Input_Processed")
