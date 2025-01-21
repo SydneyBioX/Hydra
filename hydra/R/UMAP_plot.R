@@ -184,10 +184,15 @@ if (!is.na(cell_type_of_interest) && !is.na(gene_name)) {
                 title = paste("Expression distribution of", gene_name)
             ) +
             ggridges::theme_ridges(grid = FALSE) +
+            theme_minimal() +
             theme(
                 legend.position = "none",
                 axis.title.x = element_text(hjust = 0.5, vjust = -0.5),
-                axis.title.y = element_text(hjust = 0.5)
+                axis.title.y = element_text(hjust = 0.5),
+                panel.background = element_rect(fill = "white", colour = "white"),  
+                plot.background = element_rect(fill = "white", colour = "white"),
+                panel.grid.major = element_blank(),
+                panel.grid.minor = element_blank()  
             )
         
         # Save the ridgeline plot at 300 DPI
