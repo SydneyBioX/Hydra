@@ -37,7 +37,10 @@ if (tolower(file_ext) == "rds") {
     }
     
 } else if (tolower(file_ext) %in% c("h5ad")) {
-    library(reticulate)
+    suppressPackageStartupMessages({
+        library(reticulate)
+        library(Seurat)
+    })
     anndata <- import("anndata", convert = FALSE)
     
     adata <- anndata$read_h5ad(dataset_path)
