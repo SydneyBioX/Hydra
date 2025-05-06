@@ -1172,38 +1172,47 @@ def perform_data_augmentation(label_to_name_mapping, train_num, classify_dim, tr
     else:
         train_median = np.median(train_num)
 
-    # Create a DataFrame containing median sample count
-    median_anchor = adjusted_df[adjusted_df[1] == train_median][0]
-
-    # Get the indices of samples with the median sample count in the training set
-    median_index = (train_label == int(median_anchor.iloc[0])).nonzero(as_tuple=True)[0]
-
-    if classify_dim % 2 == 0:
-        sampled_indices = torch.randperm(len(median_index))[:int(train_median)]
-        median_index = median_index[sampled_indices]
-
-    # Separate major (more samples than median) and minor classes (less samples than median)
+    # split classes relative to the median
     train_major = adjusted_df[adjusted_df[1] > train_median]
     train_minor = adjusted_df[adjusted_df[1] < train_median]
 
-    # Calculate the fold difference between the median and the minor classes
-    anchor_fold = np.array((train_median) / (train_minor[:][1]))
-    
-    # Get the class indices of minor and major classes
-    minor_cts = train_minor[0].to_numpy()
-    major_cts = train_major[0].to_numpy()
+    anchor_fold = np.array(train_median / train_minor[1])  
+    minor_cts   = train_minor[0].to_numpy()                
+    major_cts   = train_major[0].to_numpy()           
 
-    # Get the data and labels corresponding to the indices of samples with the median sample count
-    anchor_data = train_data[median_index.tolist(), :]
-    anchor_label = train_label[median_index.tolist()]
-    
-    # Initialize new_data and new_label with the anchor_data and anchor_label
-    new_data = anchor_data.to(device)
+    median_classes = adjusted_df.loc[adjusted_df[1] == train_median, 0].tolist()
+
+    median_ct      = median_classes[0]
+    median_index   = (train_label == median_ct).nonzero(as_tuple=True)[0]
+
+    if classify_dim % 2 == 0 and len(median_index) > train_median:
+        median_index = median_index[torch.randperm(len(median_index))[: int(train_median)]]
+
+    extra_indices = torch.cat([
+        (train_label == ct).nonzero(as_tuple=True)[0]
+        for ct in median_classes[1:]
+    ]) if len(median_classes) > 1 else torch.tensor([], dtype=torch.long)
+
+    anchor_data  = train_data [median_index]
+    anchor_label = train_label[median_index]
+
+    new_data  = anchor_data.to(device)
     new_label = anchor_label.to(device)
+    new_label_names.extend([label_to_name_mapping[median_ct][0]] * len(anchor_data))
+
+    if extra_indices.numel() > 0:
+        extra_data  = train_data [extra_indices]
+        extra_label = train_label[extra_indices]
+        new_data    = torch.cat([new_data,  extra_data.to(device)], 0)
+        new_label   = torch.cat([new_label, extra_label.to(device)], 0)
+        for ct in median_classes[1:]:
+            ct_count = int((extra_label == ct).sum().item())
+            new_label_names.extend([label_to_name_mapping[ct][0]] * ct_count)
 
     ### Randomly downsample the major cell types
     j = 0
     for major_ct in major_cts:
+
         # Get the number of samples for the current major cell type
         Sample_num = np.array(train_major[1])[j]
 
@@ -1230,7 +1239,7 @@ def perform_data_augmentation(label_to_name_mapping, train_num, classify_dim, tr
 
         j = j + 1
 
-        # new_label_names.extend([label_to_name_mapping[major_ct][0]] * len(Major_data))
+        new_label_names.extend([label_to_name_mapping[major_ct][0]] * len(Major_data))
 
 
     ### Augment the minor cell types
@@ -1264,7 +1273,7 @@ def perform_data_augmentation(label_to_name_mapping, train_num, classify_dim, tr
         new_data = torch.cat((new_data, reconstructed_data.to(device)), 0)
         new_label = torch.cat((new_label, reconstructed_label.to(device)), 0)
 
-        # new_label_names.extend([label_to_name_mapping[minor_ct][0]] * len(reconstructed_data))
+        new_label_names.extend([label_to_name_mapping[minor_ct][0]] * len(reconstructed_data))
 
         # Repeat the data generation process for the remaining augmentation folds
         for i in range(aug_fold - 1):
@@ -1280,7 +1289,7 @@ def perform_data_augmentation(label_to_name_mapping, train_num, classify_dim, tr
             new_data = torch.cat((new_data, reconstructed_data.to(device)), 0)
             new_label = torch.cat((new_label, reconstructed_label.to(device)), 0)
 
-            # new_label_names.extend([label_to_name_mapping[minor_ct][0]] * len(reconstructed_data))
+            new_label_names.extend([label_to_name_mapping[minor_ct][0]] * len(reconstructed_data))
 
         # Generate new data samples for the remaining cells
         reconstructed_data, reconstructed_label, real_data = get_vae_simulated_data_from_sampling(model, Minor_dl)
@@ -1322,7 +1331,7 @@ def perform_data_augmentation(label_to_name_mapping, train_num, classify_dim, tr
             new_data = torch.cat((new_data, reconstructed_data.to(device)), 0)
             new_label = torch.cat((new_label, reconstructed_label.to(device)), 0)
 
-        # new_label_names.extend([label_to_name_mapping[minor_ct][0]] * len(reconstructed_data))
+        new_label_names.extend([label_to_name_mapping[minor_ct][0]] * len(reconstructed_data))
 
         j = j + 1
 
