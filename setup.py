@@ -11,8 +11,8 @@ import sys
 from setuptools import setup, find_namespace_packages
 
 setup(
-    name='hydra',
-    version='0.1.0',
+    name="hydra-tools",
+    version='0.1.5',
     packages=find_namespace_packages(),
     install_requires=[
         'anndata',
@@ -34,7 +34,7 @@ setup(
         ],
     },
     include_package_data=True,
-    description='Thank you for using Hydra 😄, an interpretable deep generative tool for single-cell multiomics. Please refer to the full documentation available at [xxx] for detailed usage instructions. If you encounter any issues running the tool - Please open an issue on Github, and we will get back to you as soon as possible!!',
+    description='Thank you for using Hydra 😄, an interpretable deep generative tool for single-cell omics. Please refer to the full documentation available at [xxx] for detailed usage instructions. If you encounter any issues running the tool - Please open an issue on Github, and we will get back to you as soon as possible!!',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/manojmw/Hydra',

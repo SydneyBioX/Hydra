@@ -1,0 +1,2 @@
+[console_scripts]
+hydra = hydra.Hydra:main
