@@ -2,7 +2,7 @@
 
 ##############################################
 
-# Manoj M Wagle (USydney; CMRI)
+# Manoj M Wagle (USydney)
 
 ##############################################
 
@@ -219,7 +219,7 @@ def main():
             for model_file in model_files:
                 model_load_path = model_file
                 model = NN_Classifier(test_data.shape[1], len(known_cell_types))
-                model.load_state_dict(torch.load(model_load_path)) 
+                model.load_state_dict(torch.load(model_load_path, weights_only=False)) 
                 model = model.to(device)
                 model.eval()
 

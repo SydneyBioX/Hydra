@@ -1,9 +1,9 @@
-# Interpretable deep generative learning for single-cell multiomics with Hydra
+# Interpretable deep generative ensemble learning for single-cell omics with Hydra
 
 </br>
 
+<img width="842" height="1005" alt="Hydra" src="https://github.com/user-attachments/assets/0ac47760-9cbb-4420-a4fb-74d74b777ed7" />
 
-![Fig1](https://github.com/user-attachments/assets/dc83d44a-23e4-4a13-85ae-2acf06712e65)
 
 
 
