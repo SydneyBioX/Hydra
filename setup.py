@@ -44,7 +44,8 @@ setup(
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
-        'Topic :: Scientific/Computer Science :: Bioinformatics/Computational Biology',
+        "Topic :: Scientific/Engineering :: Artificial Intelligence",
+        "Topic :: Scientific/Engineering :: Bio-Informatics",
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.8'
     ],
