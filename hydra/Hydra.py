@@ -2,7 +2,7 @@
 
 ##############################################
 
-# Manoj M Wagle (USydney)
+# Manoj M Wagle (USydney, MIT CSAIL)
 
 ##############################################
 
@@ -34,9 +34,9 @@ class CustomHelpFormatter(argparse.RawTextHelpFormatter):
     def format_help(self):
         help_text = super().format_help()
         welcome_message = (
-            "\nThank you for using Hydra 😄, an interpretable deep generative tool for single-cell multiomics. Please refer to the full documentation available at [xxx] for detailed usage instructions. If you encounter any issues running the tool - Please open an issue on Github, and we will get back to you as soon as possible!!\n\n"
+            "\nThank you for using Hydra 😄, an interpretable deep generative tool for single-cell omics. Please refer to the full documentation available at [xxx] for detailed usage instructions. If you encounter any issues running the tool - Please open an issue on Github, and we will get back to you as soon as possible!!\n\n"
         )
-        Note_message = "\n📍 NOTE 📍: You need to run feature selection (`fs`) on the train datatset before annotating the query. If you have already run feature selection on the train & want to annotate (`annotation`) a different related query dataset, please process the data (`processdata`) first and then provide the path to the directory containing this processed data.\n\n"
+        Note_message = "\n📍 NOTE 📍: You need to run feature selection (`fs`) on the train datatset before annotating the cell types in the query dataset. If you have already run feature selection on the train & want to annotate (`annotation`) a different related query dataset, please process the data (`processdata`) first and then provide the path to the directory containing this processed data.\n\n"
 
         return welcome_message + Note_message + help_text 
 
