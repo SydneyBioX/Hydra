@@ -1,0 +1,18 @@
+site_name: Hydra
+theme:
+  name: 'material'
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences 
+
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Data Processing: processing.md
+  - Tutorial and Analysis:
+    - scRNA-seq: scRNA.md
+    - scMultiome-seq: scMultiome.md
+  - Contributing: contributing.md
+  - References: references.md
+  - Citing Hydra: citation.md
