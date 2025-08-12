@@ -42,7 +42,7 @@ Below, we demonstrate the processing of two Lung scRNA-seq datasets. For simplic
 
 
 ```bash
-wget -c -O "scRNA.zip" "https://huggingface.co/datasets/manojmw/Hydra_example_datasets/resolve/main/scRNA.zip?download=true"
+wget -c -O "scRNA.zip" "https://huggingface.co/datasets/manojmw/Hydra_example_datasets/resolve/main/scRNA.zip"
 unzip scRNA.zip
 ```
 
@@ -143,7 +143,7 @@ Below, we demonstrate the processing of a SHARE-seq dataset by <a href="https://
 
 
 ```bash
-wget -c -O "scMultiome.zip" "https://huggingface.co/datasets/manojmw/Hydra_example_datasets/resolve/main/scMultiome.zip?download=true"
+wget -c -O "scMultiome.zip" "https://huggingface.co/datasets/manojmw/Hydra_example_datasets/resolve/main/scMultiome.zip"
 unzip scMultiome.zip
 ```
 
