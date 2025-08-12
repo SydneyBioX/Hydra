@@ -1,4 +1,5 @@
 # Interpretable deep generative ensemble learning for single-cell omics with Hydra
+</br>
 
 [![PyPI version](https://img.shields.io/pypi/v/Hydra-tools?color=orange)](https://pypi.org/project/Hydra-tools/)
 [![Downloads](https://img.shields.io/pypi/dm/Hydra-tools?color=blue)](https://pypi.org/project/Hydra-tools/)
