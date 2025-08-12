@@ -8,8 +8,6 @@ For usage, please refer to the documentation available <a href="https://sydneybi
 
 ---
 
-For usage, please refer to the documentation available <a href="https://sydneybiox.github.io/Hydra/">here</a>
-
 </br>
 </br>
 
