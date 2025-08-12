@@ -60,7 +60,7 @@ hydra --help
 You should see an output like this:
 <div style="border-left: 1px solid purple; padding-left: 10px; overflow: auto; font-size: 14px;">
 <pre>
-Thank you for using Hydra 😄, an interpretable deep generative tool for single-cell omics. Please refer to the full documentation available at [xxx] for detailed usage instructions. If you encounter any issues running the tool - Please open an issue on Github, and we will get back to you as soon as possible!!
+Thank you for using Hydra 😄, an interpretable deep generative tool for single-cell omics. Please refer to the full documentation available at https://sydneybiox.github.io/Hydra for detailed usage instructions. If you encounter any issues running the tool - Please open an issue on Github, and we will get back to you as soon as possible!!
 
 
 📍 NOTE 📍: You need to run feature selection (`fs`) on the train datatset before annotating the cell types in the query dataset. If you have already run feature selection on the train & want to annotate (`annotation`) a different related query dataset, please process the data (`processdata`) first and then provide the path to the directory containing this processed data.
