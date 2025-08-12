@@ -8,6 +8,7 @@
 ![R](https://img.shields.io/badge/R-%3E%3D4.0-blueviolet)
 [![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/SydneyBioX/Hydra?tab=MIT-1-ov-file#readme)
 
+</br>
 
 Thank you for using Hydra, if you find a bug or encounter any issues running the tool, please open an issue on GitHub, and we will get back to you as soon as possible!!
 
