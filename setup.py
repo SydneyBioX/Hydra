@@ -12,7 +12,7 @@ from setuptools import setup, find_namespace_packages
 
 setup(
     name="hydra-tools",
-    version="0.1.6",
+    version="0.1.7",
     packages=find_namespace_packages(),
     install_requires=[
         'anndata',
@@ -27,6 +27,8 @@ setup(
         'scikit-learn',
         'scanpy',
         'tqdm',
+        'numpy',
+        'numba'
     ],
     entry_points={
         'console_scripts': [

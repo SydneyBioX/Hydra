@@ -97,10 +97,9 @@ if (!dir.exists(output_dir)) {
 }
 
 ggsave(
-    filename = file.path(output_dir, paste0("Hydra_predicted_cell_types_", modality, ".png")),
+    filename = file.path(output_dir, paste0("Hydra_predicted_cell_types_", modality, ".pdf")),
     plot = umap_plot,
     width = 15,
     height = 10,
-    units = "in",
-    dpi = 300
+    units = "in"
 )

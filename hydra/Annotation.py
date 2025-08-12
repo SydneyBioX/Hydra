@@ -29,7 +29,6 @@ parser.add_argument('--seed', type = int, default = 42, help ='seed')
 parser.add_argument('--proccessedata_dir', metavar = 'DIR', default = os.getcwd(), help = 'Path to the directory containing processed single-cell data. Default: Current working directory')  
 parser.add_argument('--balanceddata_dir', metavar = 'DIR', default = os.getcwd(), help = 'Path to the directory containing balanced single-cell data. Default: Current working directory')
 parser.add_argument('--fs_dir', metavar = 'DIR', default = os.getcwd(), help = 'Path to the directory containing feature selection results. Default: Current working directory')
-parser.add_argument('--modality', default='rna', choices=['rna', 'adt', 'atac'], help='Input data modality. Default: `rna`')
 
 # For training
 parser.add_argument('--batch_sizeanno', type = int, default = 64, help = 'batch size')

@@ -125,12 +125,11 @@ if (!dir.exists(output_dir)) {
 }
 
 ggsave(
-    filename = file.path(output_dir, paste0("umap_cell_types_", modality, ".png")),
+    filename = file.path(output_dir, paste0("umap_cell_types_", modality, ".pdf")),
     plot = umap_plot,
     width = 15,
     height = 10,
-    units = "in",
-    dpi = 300
+    units = "in"
 )
 
 # If gene_name is provided, plot UMAP with gene expression highlighted
@@ -150,12 +149,11 @@ if (!is.na(gene_name)) {
             ggtitle(paste("UMAP plot of", gene_name, "expression")) +
             common_theme
         ggsave(
-            filename = file.path(output_dir, paste0("umap_gene_expression_", gene_name, ".png")),
+            filename = file.path(output_dir, paste0("umap_gene_expression_", gene_name, ".pdf")),
             plot = gene_plot,
             width = 15,
             height = 10,
-            units = "in",
-            dpi = 300
+            units = "in"
         )
     }
 }
@@ -197,12 +195,11 @@ if (!is.na(cell_type_of_interest) && !is.na(gene_name)) {
         
         # Save the ridgeline plot at 300 DPI
         ggsave(
-            filename = file.path(output_dir, paste0("ridgeline_expression_plot_", cell_type_of_interest, "_", gene_name, ".png")),
+            filename = file.path(output_dir, paste0("ridgeline_expression_plot_", cell_type_of_interest, "_", gene_name, ".pdf")),
             plot = ridgeline_plot,
             width = 8,
             height = 6,
-            units = "in",
-            dpi = 300
+            units = "in"
         )
     }
 }

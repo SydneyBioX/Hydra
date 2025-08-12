@@ -8,6 +8,7 @@
 
 
 import os, sys, random, subprocess
+os.environ["RETICULATE_PYTHON"] = sys.executable
 import argparse
 import logging
 import glob
@@ -34,7 +35,7 @@ class CustomHelpFormatter(argparse.RawTextHelpFormatter):
     def format_help(self):
         help_text = super().format_help()
         welcome_message = (
-            "\nThank you for using Hydra 😄, an interpretable deep generative tool for single-cell omics. Please refer to the full documentation available at [xxx] for detailed usage instructions. If you encounter any issues running the tool - Please open an issue on Github, and we will get back to you as soon as possible!!\n\n"
+            "\nThank you for using Hydra 😄, an interpretable deep generative tool for single-cell omics. Please refer to the full documentation available at https://sydneybiox.github.io/Hydra/ for detailed usage instructions. If you encounter any issues running the tool - Please open an issue on Github, and we will get back to you as soon as possible!!\n\n"
         )
         Note_message = "\n📍 NOTE 📍: You need to run feature selection (`fs`) on the train datatset before annotating the cell types in the query dataset. If you have already run feature selection on the train & want to annotate (`annotation`) a different related query dataset, please process the data (`processdata`) first and then provide the path to the directory containing this processed data.\n\n"
 
@@ -191,7 +192,7 @@ setup_seed(args.seed) ### set seed for reproducbility
 
 ##############################################
 
-print("\nThank you for using Hydra 😄, an interpretable deep generative tool for single-cell multiomics. Please refer to the full documentation available at [xxx] for detailed usage instructions. If you encounter any issues running the tool - Please open an issue on Github, and we will get back to you as soon as possible!!\n\n")
+print("\nThank you for using Hydra 😄, an interpretable deep generative tool for single-cell omics. Please refer to the full documentation available at https://sydneybiox.github.io/Hydra/ for detailed usage instructions. If you encounter any issues running the tool - Please open an issue on Github, and we will get back to you as soon as possible!!\n\n")
 
 specified_gpus = args.gpu.split(',') if args.gpu else []
 num_gpus_specified = len(specified_gpus)
@@ -205,9 +206,8 @@ else:
 # Get the indices of GPUs that are currently visible to PyTorch
 active_gpu_indices = os.environ.get("CUDA_VISIBLE_DEVICES", "").split(',')
 
-if num_gpus >= 1 and (device_str == "CPU" or device_str == "MPS"):
-    print("It seems the CPU version of PyTorch is installed. For GPU utilization, \
-        please install the GPU version of PyTorch. Currently, running on CPU!!!")
+if num_gpus >= 1 and (device_str == "CPU"):
+    print("It seems the CPU version of PyTorch is installed. For GPU utilization, please install the GPU version of PyTorch. Currently, running on CPU!!!")
     
 print("===============================\n")
 print("Device to be used:", device_str, "\n")

@@ -345,7 +345,7 @@ for (dataset_idx in seq_along(preprocessed_datasets)) {
 
   if (!is.null(test_file)) {                  
     # Handle test data
-    print(glue("Processing test data...}"))
+    print(glue("Processing test data..."))
 
     dataset_test <- preprocessed_datasets1[[dataset_idx]]
     modality_test_filt <- dataset_test$modality
