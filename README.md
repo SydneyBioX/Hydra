@@ -4,7 +4,7 @@ Thank you for using Hydra, if you find a bug or encounter any issues running the
 
 ---
 
-For usage, please refer to the documentation available <a href="https://sydneybiox.github.io/Hydra/">here</a>
+<center>For usage, please refer to the documentation available <a href="https://sydneybiox.github.io/Hydra/">here</a></center>
 
 ---
 
