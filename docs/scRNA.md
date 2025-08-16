@@ -267,7 +267,7 @@ Here, we will visualize the expression of the top gene **ENSG00000137077**.
 <span style="display: block; height: 1px;"></span>
 
 ```bash
-hydra --setting plot --modality rna --train Lung_Madissoon.h5ad --gene "ENSG00000137077" --ctofinterest "endothelial cell of lymphatic vessel" --celltypecol cell_type
+hydra --setting plot --modality rna --train scRNA/Lung_Madissoon.h5ad --gene "ENSG00000137077" --ctofinterest "endothelial cell of lymphatic vessel" --celltypecol cell_type
 ```
 
 <span style="display: block; height: 1px;"></span>
@@ -533,7 +533,7 @@ The annotation results generated will be stored in the directory <code><span sty
 <code><span style="color: red;">Hydra</span></code> also allows users to visualize the predicted labels on the UMAP plot. We will use the Hydra predicted labels for the Lung dataset (He <i>et al</i>):
 
 ```bash
-hydra --setting plot --predictions True --test Lung_He.h5ad --modality rna --ctpredictions Results/Annotation/Hydra-25/cell_type_predicted_Hydra-25.csv
+hydra --setting plot --predictions True --test scRNA/Lung_He.h5ad --modality rna --ctpredictions Results/Annotation/Hydra-25/cell_type_predicted_Hydra-25.csv
 ```
 <span style="display: block; height: 1px;"></span>
 
