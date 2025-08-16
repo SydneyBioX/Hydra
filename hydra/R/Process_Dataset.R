@@ -129,11 +129,11 @@ preprocess_dataset_train <- function(dataset_file, cell_type_label, batch_size =
     if (!column_exists) {
       stop(glue("The specified cell type label column '{cell_type_label}' does not exist in the AnnData object. Please specify the correct column that corresponds to cell type labels in your reference dataset."))
     }
-    if (py_has_attr(dataset$X, "toarray")) {
-      assay_data <- t(py_to_r(dataset$X$toarray()))  # Convert sparse matrix to dense array
-    } else {
-      assay_data <- t(py_to_r(dataset$X))  # Already a dense array
-    }
+
+    scipy <- import("scipy.sparse", convert = FALSE)
+    X_tmp <- scipy$csc_matrix(dataset$X)     
+    assay_data <- t(as.matrix(py_to_r(X_tmp))) 
+    
     gene_names <- py_to_r(dataset$var$index$to_list())
     rownames(assay_data) <- gene_names
     cell_type_vector <- py_to_r(dataset$obs[[cell_type_label]]$to_list())
@@ -233,11 +233,11 @@ preprocess_dataset_test <- function(dataset_file, batch_size = 1000) {
     rm(dataset)
     gc()
   } else if (any(grepl("AnnData", class(dataset)))) {
-    if (py_has_attr(dataset$X, "toarray")) {
-      assay_data <- t(py_to_r(dataset$X$toarray()))  # Convert sparse matrix to dense array
-    } else {
-      assay_data <- t(py_to_r(dataset$X))  # Already a dense array
-    }
+
+    scipy <- import("scipy.sparse", convert = FALSE)
+    X_tmp <- scipy$csc_matrix(dataset$X)     
+    assay_data <- t(as.matrix(py_to_r(X_tmp))) 
+    
     gene_names <- py_to_r(dataset$var$index$to_list())
     rownames(assay_data) <- gene_names
 
