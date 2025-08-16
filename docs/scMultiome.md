@@ -1,7 +1,6 @@
 # Single-cell multiomics
 
 [![PyPI version](https://img.shields.io/pypi/v/Hydra-tools?color=orange)](https://pypi.org/project/Hydra-tools/)
-[![Downloads](https://img.shields.io/pypi/dm/Hydra-tools?color=blue)](https://pypi.org/project/Hydra-tools/)
 [![Docs](https://img.shields.io/badge/docs-passing-brightgreen)](https://sydneybiox.github.io/Hydra/)
 ![Python](https://img.shields.io/badge/python-%3E%3D3.8-blue)
 ![R](https://img.shields.io/badge/R-%3E%3D4.0-blueviolet)
