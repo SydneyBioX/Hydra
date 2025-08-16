@@ -42,11 +42,9 @@ if (tolower(file_ext) == "rds") {
     
     adata <- anndata$read_h5ad(dataset_path)
 
-    if (py_has_attr(adata$X, "toarray")) {
-        assay_data <- t(py_to_r(adata$X$toarray()))  
-    } else {
-        assay_data <- t(py_to_r(adata$X))  
-    }
+    scipy       <- import("scipy.sparse", convert = FALSE)
+    X_tmp       <- scipy$csc_matrix(adata$X)            
+    assay_data  <- t(as.matrix(py_to_r(X_tmp)))          
     
     gene_names <- py_to_r(adata$var$index$to_list())
     rownames(assay_data) <- gene_names
