@@ -619,8 +619,11 @@ def main():
                 for i in tqdm(range(classify_dim)):
 
                     cell_type_name = index_to_label[i]
-
-                    cell_type_name = cell_type_name.replace("/", "_")
+                    
+                    try:
+                        cell_type_name = cell_type_name.replace("/", "_")
+                    except:
+                        pass
 
                     # Select the data for the current cell type and for all other cell types
                     current_type_data = data_noscale[torch.where(label == i)].reshape(-1, feature_num)
