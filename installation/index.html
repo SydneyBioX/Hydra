@@ -1,0 +1,730 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../processing/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
+    
+    
+      
+        <title>Installation - Hydra</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.7e37652d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#installation-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Hydra" class="md-header__button md-logo" aria-label="Hydra" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hydra
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Installation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Hydra" class="md-nav__button md-logo" aria-label="Hydra" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Hydra
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-requisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pre-requisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#r-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      R dependencies
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installing-hydra" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installing Hydra
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verifying-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verifying installation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../processing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Data Processing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tutorial and Analysis
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Tutorial and Analysis
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scRNA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    scRNA-seq
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scMultiome/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    scMultiome-seq
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    References
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../citation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Citing Hydra
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-requisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pre-requisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#r-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      R dependencies
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installing-hydra" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installing Hydra
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verifying-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verifying installation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="installation-guide">🚀 Installation guide</h1>
+<p><a href="https://pypi.org/project/Hydra-tools/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/Hydra-tools?color=orange" /></a>
+<a href="https://sydneybiox.github.io/Hydra/"><img alt="Docs" src="https://img.shields.io/badge/docs-passing-brightgreen" /></a>
+<img alt="Python" src="https://img.shields.io/badge/python-%3E%3D3.8-blue" />
+<img alt="R" src="https://img.shields.io/badge/R-%3E%3D4.0-blueviolet" />
+<a href="https://github.com/SydneyBioX/Hydra?tab=MIT-1-ov-file#readme"><img alt="License" src="https://img.shields.io/badge/license-MIT-green" /></a></p>
+<h3 id="pre-requisites"><strong>Pre-requisites</strong></h3>
+<ul>
+<li>Python &gt;= 3.8</li>
+<li>R &gt;= 4.0</li>
+</ul>
+<p><span style="display: block; height: 1px;"></span></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We recommend creating a separate environment such as <strong><a href="https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html#">Mamba</a></strong> to avoid package conflicts.</p>
+</div>
+<h3 id="r-dependencies"><strong>R dependencies</strong></h3>
+<p>Before installing <code><span style="color: red;">Hydra</span></code>, please make sure you install the following packages:</p>
+<div class="highlight"><pre><span></span><code><span class="n">mamba</span><span class="w"> </span><span class="n">install</span><span class="w"> </span><span class="o">-</span><span class="n">c</span><span class="w"> </span><span class="n">conda</span><span class="o">-</span><span class="n">forge</span><span class="w"> </span><span class="o">-</span><span class="n">c</span><span class="w"> </span><span class="n">bioconda</span><span class="w"> </span>\
+<span class="w">  </span><span class="n">bioconductor</span><span class="o">-</span><span class="n">hdf5array</span><span class="w"> </span>\
+<span class="w">  </span><span class="n">bioconductor</span><span class="o">-</span><span class="n">singlecellexperiment</span><span class="w"> </span>\
+<span class="w">  </span><span class="n">bioconductor</span><span class="o">-</span><span class="n">rhdf5</span><span class="w"> </span>\
+<span class="w">  </span><span class="n">r</span><span class="o">-</span><span class="n">seurat</span><span class="w"> </span>\
+<span class="w">  </span><span class="n">r</span><span class="o">-</span><span class="n">glue</span><span class="w"> </span>\
+<span class="w">  </span><span class="n">r</span><span class="o">-</span><span class="n">reticulate</span><span class="w"> </span>\
+<span class="w">  </span><span class="n">r</span><span class="o">-</span><span class="n">matrix</span><span class="w"> </span>\
+<span class="w">  </span><span class="n">r</span><span class="o">-</span><span class="n">ggplot2</span><span class="w"> </span>\
+<span class="w">  </span><span class="n">r</span><span class="o">-</span><span class="n">rlang</span><span class="w"> </span>\
+<span class="w">  </span><span class="n">r</span><span class="o">-</span><span class="n">ggridges</span><span class="w"> </span>\
+<span class="w">  </span><span class="n">r</span><span class="o">-</span><span class="n">anndata</span><span class="w"> </span>\
+<span class="w">  </span><span class="n">bioconductor</span><span class="o">-</span><span class="n">zellkonverter</span>
+</code></pre></div>
+<h3 id="installing-hydra"><strong>Installing Hydra</strong></h3>
+<p>Install <code><span style="color: red;">Hydra</span></code> via pip:</p>
+<div class="highlight"><pre><span></span><code>pip3<span class="w"> </span>install<span class="w"> </span>hydra-tools
+</code></pre></div>
+<h3 id="verifying-installation"><strong>Verifying installation</strong></h3>
+<p>To check the <code><span style="color: red;">Hydra</span></code> installation, please run:</p>
+<p><div class="highlight"><pre><span></span><code>hydra<span class="w"> </span>--help
+</code></pre></div>
+<span style="display: block; height: 1px;"></span></p>
+<p>You should see an output like this:</p>
+<div style="border-left: 1px solid purple; padding-left: 10px; overflow: auto; font-size: 14px;">
+<pre>
+Thank you for using Hydra 😄, an interpretable deep generative tool for single-cell omics. Please refer to the full documentation available at https://sydneybiox.github.io/Hydra for detailed usage instructions. If you encounter any issues running the tool - Please open an issue on Github, and we will get back to you as soon as possible!!
+
+
+📍 NOTE 📍: You need to run feature selection (`fs`) on the train datatset before annotating the cell types in the query dataset. If you have already run feature selection on the train & want to annotate (`annotation`) a different related query dataset, please process the data (`processdata`) first and then provide the path to the directory containing this processed data.
+
+usage: Hydra [-h] [--seed SEED] [--train TRAIN] [--test TEST] [--celltypecol CELLTYPECOL] [--modality {rna,adt,atac}] [--base_dir DIR] [--gene GENE] [--ctofinterest CTOFINTEREST]
+             [--predictions PREDICTIONS] [--ctpredictions CTPREDICTIONS] [--processdata_batch_size PROCESSDATA_BATCH_SIZE] [--batch_size BATCH_SIZE] [--attr_batch_size ATTR_BATCH_SIZE]
+             [--epochs EPOCHS] [--lr LR] [--gpu GPU] [--z_dim Z_DIM] [--hidden_rna HIDDEN_RNA] [--hidden_adt HIDDEN_ADT] [--hidden_atac HIDDEN_ATAC] [--num_models NUM_MODELS] --setting
+             {processdata,fs,plot,annotation}
+             ...
+
+positional arguments:
+  annotation_args       Additional arguments for annotation script
+
+options:
+  -h, --help                  show this help message and exit
+  --seed SEED                 seed
+  --train TRAIN               Path to the training dataset (Seurat, SCE or Anndata object)
+  --test TEST                 Path to the test dataset (Seurat or SCE object)
+  --celltypecol CELLTYPECOL
+                              Cell type label column in your input dataset (Seurat, SCE or Anndata object). Default: `cell_type`
+  --modality {rna,adt,atac}
+                              Input data modality. Default: `rna`
+  --base_dir DIR              Path to the directory containing processed data directory. Default: Current working directory
+  --gene GENE                 Name of the gene whose expression is to be highlighted in the plot
+  --ctofinterest CTOFINTEREST
+                              Name of the cell type for which a ridgeline plot of gene expression should be generated
+  --predictions PREDICTIONS
+                              Generate UMAP plot for Hydra predicted cell types
+  --ctpredictions CTPREDICTIONS
+                              Path to the csv file containing cell types predicted by Hydra
+  --processdata_batch_size PROCESSDATA_BATCH_SIZE
+                              batch size for processing reference and query datasets
+  --batch_size BATCH_SIZE
+                              batch size for processing data during training
+  --attr_batch_size ATTR_BATCH_SIZE
+                              batch size for feature atrribution. Please adjust this based on your GPU memory
+  --epochs EPOCHS             num of training epochs
+  --lr LR                     learning rate
+  --gpu GPU                   Please specify the GPU to use
+  --z_dim Z_DIM               Number of neurons in latent space
+  --hidden_rna HIDDEN_RNA
+                              Number of neurons for RNA layer
+  --hidden_adt HIDDEN_ADT
+                              Number of neurons for ADT layer
+  --hidden_atac HIDDEN_ATAC
+                              Number of neurons for ATAC layer
+  --num_models NUM_MODELS
+                              Number of models for Ensemble Learning
+  --setting {processdata,fs,plot,annotation}
+                            `processdata` for processing input train and test Seurat, SCE or Anndata objects;
+                            `fs` for feature selection to obtain cell-identity genes;
+                            `plot` for generating UMAP plot of the dataset (Additionally, highlights gene expression when called with the `--gene` argument; Generates a ridgeline plot of expression of the specified gene in cell type of interest vs all other cell types when called with `--ctofinterest` argument; Generates a UMAP plot of Hydra predicted labels when called with `--predictions` argument);
+                            `annotation` for automated annotation of the query dataset
+</pre>
+</div>
+
+<p><br></p>
+<hr />
+<p style="text-align: left; font-size: 15px">
+  Documentation by <a href="http://manojmw.github.io" target="_blank">Manoj M Wagle</a>
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.92b07e13.min.js"></script>
+      
+    
+  </body>
+</html>
