@@ -23,37 +23,7 @@ device = torch.device("cuda" if torch.cuda.is_available()
 
 ##############################################
 
-class CurriculumSampler(torch.utils.data.Sampler):
-    def __init__(self, labels, num_epochs):
-        self.labels = labels
-        self.num_epochs = num_epochs
-        self.current_epoch = 0
-
-    def __iter__(self):
-        weights = self._compute_weights()
-        total = len(self.labels)
-        indices = np.random.choice(total, size=total, p=weights)
-        return iter(indices)
-
-    def _compute_weights(self):
-        label_counts = Counter(self.labels)
-        max_count = max(label_counts.values())
-        curriculum_ratio = self.current_epoch / self.num_epochs
-        weights = [1 / (label_counts[label] * (1 + curriculum_ratio)) for label in self.labels]
-
-        # Normalize weights
-        weight_sum = sum(weights)
-        weights = [weight / weight_sum for weight in weights]
-        return weights
-    
-    def update_epoch(self, epoch):
-        self.current_epoch = epoch
-
-
-
-##############################################
-
-def train_model(model, train_dl, lr, epochs, classify_dim=17, save_path="", save_filename="", feature_num=10000, use_balancing=False):
+def train_model(model, train_dl, lr, epochs, classify_dim=17, save_path="", save_filename="", feature_num=10000):
     criterion = nn.MSELoss().cuda()
     criterion_smooth_cty = CrossEntropyLabelSmooth().cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
@@ -71,22 +41,12 @@ def train_model(model, train_dl, lr, epochs, classify_dim=17, save_path="", save
     no_improv = 0
     patience = 10
 
-    # Curriculum learning sampler initialization
-    if use_balancing:
-        sampler = CurriculumSampler(train_dl.dataset.labels, epochs)
-    else:
-        sampler = None
-
     for epoch in tqdm(range(1, epochs + 1)):
         model.train()
         train_top1 = AverageMeter('Acc@1', ':6.2f')
         train_loss = 0.0
         train_batches = 0
-
-        # Update the sampler for curriculum learning at the start of each epoch
-        if use_balancing:
-            sampler.update_epoch(epoch)
-
+      
         for batch_sample in train_dl:
             optimizer.zero_grad()
 
