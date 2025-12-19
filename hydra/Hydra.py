@@ -334,8 +334,7 @@ def main():
                 # Train the original model on the original raw data including all classifiers
                 model, loss, train_num = train_model(model, train_dl, lr=args.lr, epochs=args.epochs, 
                         classify_dim=classify_dim, save_path=model_save_path, 
-                        save_filename='Original_Model.pth.tar', feature_num=feature_num, 
-                        use_balancing=True)
+                        save_filename='Original_Model.pth.tar', feature_num=feature_num)
 
             
                 checkpoint_tar = os.path.join(model_save_path, 'Original_Model.pth.tar')
@@ -395,8 +394,7 @@ def main():
 
                     Step2_model, loss, _ = train_model(Step2_model, new_train_dl, lr=args.lr, epochs=epochs, 
                                             classify_dim=classify_dim, save_path=model_save_path, 
-                                            save_filename='FineTuned_Model.pth.tar', feature_num=feature_num, 
-                                            use_balancing=False)
+                                            save_filename='FineTuned_Model.pth.tar', feature_num=feature_num)
                     
                     # Create directory for balanced data if it does not exist
                     balanced_data_dir = os.path.join(cwd, f'Balanced_Data-{args.num_models}')
