@@ -779,7 +779,7 @@ def process_data_annotation_query(args, feature_dir, split_folder):
         # Filter data to only include top features
         test_data = test_data[:, top_feature_indices]
 
-    if args.adt != "NULL" and args.atac == "NULL":
+    if args.rna != "NULL" and args.adt != "NULL" and args.atac == "NULL":
         mode = "scRNA+scADT"
 
         rna_data_path = args.rna
@@ -838,7 +838,7 @@ def process_data_annotation_query(args, feature_dir, split_folder):
         # Filter data to only include top features
         test_data = test_data[:, top_feature_indices]
 
-    if args.adt == "NULL" and args.atac != "NULL":
+    if args.rna != "NULL" and args.adt == "NULL" and args.atac != "NULL":
         mode = "scRNA+scATAC"
 
         rna_data_path = args.rna
