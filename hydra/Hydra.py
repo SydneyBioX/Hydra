@@ -281,17 +281,17 @@ def main():
                 args.cty = f"{split_folder}/ct_train.csv"
 
 
-                if args.adt != "NULL" and args.atac != "NULL":
+                if args.rna != "NULL" and args.adt != "NULL" and args.atac != "NULL":
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_adt, nfeatures_atac, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
                     logging.info("The Dataset is: scRNA+scADT+scATAC")
 
-                if args.adt != "NULL" and args.atac == "NULL": 
+                if args.rna != "NULL" and args.adt != "NULL" and args.atac == "NULL": 
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_adt, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
                     logging.info("The Dataset is: scRNA+scADT")
 
-                if args.adt == "NULL" and args.atac != "NULL":
+                if args.rna != "NULL" and args.adt == "NULL" and args.atac != "NULL":
                     # Load and preprocess the data
                     (train_data, train_dl, train_label, mode, classify_dim, nfeatures_rna, nfeatures_atac, feature_num, label_to_name_mapping) = load_and_preprocess_data(args, setting = "train")
                     logging.info("The Dataset is: scRNA+scATAC")
@@ -476,7 +476,7 @@ def main():
                     data = torch.cat((rna_data, adt_data, atac_data), 1)
                     data_noscale = torch.cat((rna_data_noscale, adt_data_noscale, atac_data_noscale), 1)
                 
-                if adt_data_path != "NULL" and atac_data_path == "NULL":
+                if args.rna != "NULL" and adt_data_path != "NULL" and atac_data_path == "NULL":
                     mode = "scRNA+scADT"
 
                     rna_name = h5py.File(rna_data_path, "r")['matrix/features'][:]
@@ -496,7 +496,7 @@ def main():
                     data = torch.cat((rna_data, adt_data), 1)
                     data_noscale = torch.cat((rna_data_noscale, adt_data_noscale), 1)
                 
-                if adt_data_path == "NULL" and atac_data_path != "NULL":
+                if args.rna != "NULL" and adt_data_path == "NULL" and atac_data_path != "NULL":
                     mode = "scRNA+scATAC"
 
                     rna_name = h5py.File(rna_data_path, "r")['matrix/features'][:]
