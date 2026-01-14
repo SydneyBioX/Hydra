@@ -93,7 +93,10 @@ def main():
             cwd = os.getcwd()
             feature_dir = f"{args.fs_dir}/Results/Feature_Selection/Hydra-{args.num_classifiers}/"
 
-            args.rna = f"{split_folder}/rna_train.h5"
+            if os.path.isfile(f"{split_folder}/rna_train.h5"):
+                args.rna = f"{split_folder}/rna_train.h5"
+            else:
+                args.rna = "NULL" 
             if os.path.isfile(f"{split_folder}/adt_train.h5"):
                 args.adt = f"{split_folder}/adt_train.h5"
             else:
