@@ -546,7 +546,7 @@ def main():
                     data = adt_data
                     data_noscale = adt_data_noscale
                 
-                if rna_data_path == "NULL" and atac_data_path == "NULL":
+                if rna_data_path == "NULL" and adtdatapath == "NULL":
                     mode = "scATAC-seq"
 
                     atac_name = h5py.File(atac_data_path, "r")['matrix/features'][:]
