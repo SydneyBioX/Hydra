@@ -317,7 +317,7 @@ def get_vae_simulated_data_from_sampling(model, dl):
 ##############################################
 
 def load_and_preprocess_data(args, setting=""):
-    if args.adt != "NULL" and args.atac != "NULL":
+    if args.rna != "NULL" and args.adt != "NULL" and args.atac != "NULL":
 
         mode = "scRNA+scADT+scATAC"
 
@@ -375,7 +375,7 @@ def load_and_preprocess_data(args, setting=""):
             test_dl = DataLoader(test_transformed_dataset, batch_size = args.batch_size, shuffle = False, num_workers = 0, drop_last = False)
 
 
-    if args.adt != "NULL" and args.atac == "NULL":
+    if args.rna != "NULL" and args.adt != "NULL" and args.atac == "NULL":
 
         mode = "scRNA+scADT"
 
@@ -427,7 +427,7 @@ def load_and_preprocess_data(args, setting=""):
             test_dl = DataLoader(test_transformed_dataset, batch_size = args.batch_size, shuffle = False, num_workers = 0, drop_last = False)
 
 
-    if args.adt == "NULL" and args.atac != "NULL":
+    if args.rna != "NULL" and args.adt == "NULL" and args.atac != "NULL":
 
         mode = "scRNA+scATAC"
 
