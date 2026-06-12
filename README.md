@@ -28,7 +28,7 @@ For usage, please refer to the documentation available <a href="https://sydneybi
 
 If you use Hydra in your work, please cite:
 
-Wagle, M.M., Liu, C., Liu, Z., Wang, Y., Kellis, M., Patrick, E. & Yang, P. Interpretable deep generative ensemble learning for single-cell omics with Hydra. <i>Molecular Systems Biology (2026)</i>. https://doi.org/10.1038/s44320-026-00208-7
+Wagle, M.M., Liu, C., Liu, Z., Wang, Y., Kellis, M., Patrick, E. & Yang, P. Interpretable deep generative ensemble learning for single-cell omics with Hydra. <i>Molecular Systems Biology</i> (2026). https://doi.org/10.1038/s44320-026-00208-7
 
 
 
