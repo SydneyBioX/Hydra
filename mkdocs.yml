@@ -3,7 +3,9 @@ theme:
   name: 'material'
 markdown_extensions:
   - admonition
-  - pymdownx.superfences 
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences
 
 
 nav:
@@ -16,3 +18,4 @@ nav:
   - Contributing: contributing.md
   - References: references.md
   - Citing Hydra: citation.md
+  - Related Tools: related_tools.md
