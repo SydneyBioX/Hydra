@@ -11,6 +11,6 @@
     [![Documentation](https://img.shields.io/badge/Documentation-teal)](https://kellislab.github.io/Phenoverse/) &nbsp;
     [![PyPI](https://img.shields.io/pypi/v/Phenoverse?color=teal)](https://pypi.org/project/Phenoverse/) &nbsp;
     [![GitHub](https://img.shields.io/badge/GitHub-black?logo=github)](https://github.com/KellisLab/Phenoverse) &nbsp;
-    [![Manuscript](https://img.shields.io/badge/Manuscript-blue)](https://doi.org/10.1038/s44320-026-00208-7)
+    [![Manuscript](https://img.shields.io/badge/Manuscript-blue)](https://doi.org/10.64898/2026.07.21.738207)
 
 </div>
